@@ -1,0 +1,64 @@
+/* ============================
+   Estilos personalizados para la portada
+   ============================ */
+
+/* Fondo general */
+body {
+    background-color: #000000; /* Fondo negro */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+/* Caja blanca centrada */
+.portada-box {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+    max-width: 700px;
+    width: 100%;
+}
+
+/* Títulos */
+.titulo-principal {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #013312;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.subtitulo {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #014d29;
+}
+
+.subtitulo-2 {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #6c757d;
+}
+
+/* Lista de nombres */
+.nombres h4 {
+    font-weight: 400;
+    color: #343a40;
+    transition: color 0.3s ease;
+}
+
+.nombres h4:hover {
+    color: #0d6efd;
+}
+
+/* Botón */
+.boton {
+    margin-top: 25px;
+    border-radius: 30px;
+    padding: 12px 35px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.boton:hover {
+    transform: scale(1.08);
+    background-color: #0b5ed7;
+}
