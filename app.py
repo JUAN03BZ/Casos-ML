@@ -42,12 +42,21 @@ def casos():
             "referencia": " "
         },
         {
-            "titulo": " Andres",
-            "empresa": "",
-            "problema": " ",
-            "algoritmo": " ",
-            "beneficios": " ",
-            "referencia": " "
+            "titulo": "Andres Julian Canasto Acevedo, Industria Financiera",
+            "empresa": "American Express",
+            "problema": " American Express procesa miles de millones de transacciones anualmente, lo que representa un reto enorme en términos de seguridad financiera. El principal problema que enfrentaba la compañía era la detección de fraudes en tiempo real, ya que debía identificar operaciones sospechosas sin afectar la experiencia de los clientes legítimos. Un sistema ineficiente podría generar falsos positivos que bloqueen compras válidas, o falsos negativos que permitan fraudes millonarios. Por ello, el reto consistía en mantener la tasa de fraude más baja de la industria, mientras se garantizaba rapidez y precisión en la autorización de cada transacción ",
+            "algoritmo": " Para abordar este desafío, American Express implementó modelos de aprendizaje supervisado basados en técnicas híbridas. Entre ellas se encuentran los Gradient Boosting Machines (GBM), empleados para clasificar transacciones fraudulentas, y las redes neuronales recurrentes (RNN) con LSTM, capaces de detectar patrones anómalos en series temporales de compras. Estos modelos forman parte de la décima generación de su sistema antifraude, conocido como Gen X, que combina miles de indicadores y más de mil árboles de decisión para evaluar en tiempo real la validez de cada operación. Además, la empresa utiliza infraestructura de alto rendimiento con GPUs de NVIDIA y herramientas como TensorRT y Triton Inference Server, lo que permite ejecutar inferencias en menos de dos milisegundos",
+            "beneficios": " Los resultados obtenidos han sido significativos tanto a nivel técnico como financiero. La latencia del sistema se redujo a menos de dos milisegundos, lo que permite tomar decisiones instantáneas en millones de transacciones simultáneas. En términos de eficiencia, el uso de GPUs aumentó hasta 50 veces el procesamiento en comparación con sistemas tradicionales basados en CPU. Asimismo, la precisión del modelo mejoró alrededor de un 6% en segmentos específicos, logrando detectar fraudes por un valor estimado de dos mil millones de dólares al año. Gracias a estos avances, American Express ha mantenido durante catorce años consecutivos la tasa de fraude más baja de la industria de tarjetas de crédito, consolidándose como un referente en la aplicación del aprendizaje automático supervisado para la seguridad financiera ",
+            "referencia": 
+            [
+                "AI to Combat Financial Fraud. NVIDIA Customer Stories. https://www.nvidia.com/en-us/customer-stories/american-express-prevents-fraud-and-foils-cybercrime-with-nvidia-ai-solutions/?utm_source=chatgpt.com ",
+                "Mixson, E. (2021, Junio 30). 3 Ways American Express is Using AI to Stay Ahead of Disruption | AI, Data & Analytics Network. AI, Data & Analytics Network. https://www.aidataanalytics.network/data-science-ai/articles/3-ways-american-express-is-using-ai-to-stay-ahead-of-disruption?utm_source=chatgpt.com",
+                "Artificial intelligence at American Express - Two current use cases - EmerJ Artificial Intelligence Research. Emerj Artificial Intelligence Research. https://emerj.com/artificial-intelligence-at-american-express/?utm_source=chatgpt.com",
+                "OpenAI. (2024). Casos relevantes de American Express y Machine Learning: problemas, algoritmos y beneficios. ChatGPT (versión GPT-4) [Modelo de lenguaje]. https://chat.openai.com/ ",
+                "Brooks, J. AmEX’s impactful use of Machine Learning – SignalScout. https://signalscout.io/amexs-impactful-use-of-machine-learning/?utm_source=chatgpt.com",
+                "DigitalDefynd, T. (2025, Agosto 25). 5 ways American Express is using AI - Case Study [2025] - DigitalDefynd. DigitalDefynd. https://digitaldefynd.com/IQ/american-express-using-ai-case-study/?utm_source=chatgpt.com",
+                "American Express: Using Big Data to Prevent Fraud - Digital Innovation and Transformation. (2022, Octubre 2). Digital Innovation and Transformation. https://d3.harvard.edu/platform-digit/submission/american-express-using-big-data-to-prevent-fraud/?utm_source=chatgpt.com"
+            ]
         }
 
 
