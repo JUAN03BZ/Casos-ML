@@ -34,12 +34,13 @@ def casos():
         }
 ,
         {
-            "titulo": " German",
-            "empresa": "",
-            "problema": " ",
-            "algoritmo": " ",
-            "beneficios": " ",
-            "referencia": " "
+            "titulo": "German Adolfo Bautista Corena - Industria de entretenimiento",
+            "empresa": "Netflix",
+            "problema": "Netflix debía invertir grandes sumas en producciones originales sin certeza de éxito. Antes de apostar por una serie o película, surgían preguntas clave: ¿habrá suficiente audiencia?, ¿en qué países funcionará mejor?, ¿qué actores, directores o géneros garantizan más atractivo? Tradicionalmente los estudios se guiaban por intuición o tendencias generales, pero Netflix buscaba un enfoque más científico y escalable.",
+            "algoritmo": "A finales de los 2000, con grandes volúmenes de datos de usuarios, Netflix implementó Machine Learning supervisado para predecir demanda. Usaba como entradas género, elenco, director, país, año y desempeño de títulos similares, y como salida métricas de éxito como horas vistas y nuevos suscriptores. Empleó regresión para estimar audiencias, (árboles de decisión y Random Forest) para clasificar probabilidades de éxito por segmentos, y luego (redes neuronales) para captar patrones más complejos.",
+            "beneficios": "El uso de Machine Learning permitió a Netflix reducir el riesgo en sus inversiones al basarse en predicciones sustentadas en datos y no solo en la intuición, lo que facilitó acertar en mercados internacionales al anticipar qué producciones tendrían mayor éxito en regiones como Latinoamérica, Europa o Asia. Además, impulsó la expansión de su catálogo original, convirtiéndose en un valor diferencial de la plataforma, y le otorgó una ventaja competitiva frente a otros estudios que dudaban, al apostar con mayor seguridad en proyectos respaldados por modelos predictivos. ",
+            "referencia": "OpenAI. (2025). Casos relevantes de Netflix y Machine Learning: problemas y algoritmos. ChatGPT (versión GPT-5) [Modelo de lenguaje]. https://chat.openai.com/, Wired. (2018, enero 2). How do Netflix’s algorithms work? Machine learning helps to predict what viewers will like. WIRED. https://www.wired.com/story/how-do-netflixs-algorithms-work-machine-learning-helps-to-predict-what-viewers-will-like, Netflix Technology Blog. (2018, mayo 9). Supporting content decision makers with machine learning. Medium. https://netflixtechblog.com/supporting-content-decision-makers-with-machine-learning-995b7b76006f"
+
         },
         {
             "titulo": "Andres Julian Canasto Acevedo, Industria Financiera",
