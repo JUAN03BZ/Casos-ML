@@ -16,13 +16,19 @@ def index():
 def casos():
     CASES = [
         {
-            "titulo": "Juan ",
-            "empresa": "",
-            "problema": " ",
-            "algoritmo": " ",
-            "beneficios": " ",
-            "referencia": " "
-        }
+            "titulo": "Juan Jose Barrera Zamora - Industria Musical",
+            "empresa": "Spotify – The Echo Nest",
+            "problema": "Los usuarios tienen dificultades para descubrir nueva música personalizada en medio de millones de canciones disponibles. Filtrar manualmente se vuelve imposible sin una recomendación inteligente.",
+            "algoritmo": "Filtrado colaborativo, filtrado basado en contenido, técnicas de matrix factorization, NLP y modelos de audio.",
+            "beneficios": "Recomendaciones personalizadas como Discover Weekly, mayor fidelización, descubrimiento de nuevos artistas, mejora en la interacción del usuario.",
+            "referencia": [
+            "Wikipedia. (2023, septiembre 27). The Echo Nest. En Wikipedia. https://en.wikipedia.org/wiki/The_Echo_Nest",
+            "Music Machinery. (2009, mayo 19). Spotify + Echo Nest = w00t! Music Machinery. https://musicmachinery.com/2009/05/19/spotify-echo-nest-w00t/",
+            "Springer. (2019). Effects of recommendations on the playlist creation behavior of users. User Modeling and User-Adapted Interaction, 29(2), 193–232. https://doi.org/10.1007/s11257-019-09237-4",
+            "Wired. (2017, octubre). Musica Globalista: Spotify Discovery Engine. Wired. https://www.wired.com/beyond-the-beyond/2017/10/musica-globalista-spotify-discovery-engine",
+            "Spotify. (s. f.). Understanding recommendations. Spotify. https://www.spotify.com/us/safetyandprivacy/understanding-recommendations"
+  ]
+}
 ,
         {
             "titulo": "Cristhian Felipe Bolivar Narvaez - Industria Bancaria ",
