@@ -51,7 +51,7 @@ def practico():
 
         # Educación vs Sueldo
         plt.subplot(1, 2, 2)
-        edu_range = range(1, 7)  # Niveles educativos
+        edu_range = range(1, 8)  # Niveles educativos
         sueldos_edu = [RegresionLinear.model.predict([[experiencia, e]])[0] for e in edu_range]
 
         plt.scatter(RegresionLinear.df["Educacion"], RegresionLinear.df["Sueldo"], color="green", label="Datos")
