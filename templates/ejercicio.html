@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio - Regresión Lineal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='escudo.png') }}" alt="Escudo UDEC" class="logo">
+    </header>
+
+    <main>
+        <h1>Ejercicio Interactivo</h1>
+        <form method="POST">
+            <label for="experiencia">Años de experiencia:</label>
+            <input type="number" name="experiencia" required>
+
+            <label for="educacion">Nivel de educación:</label>
+            <select name="educacion" required>
+                <option value="1">Técnico</option>
+                <option value="2">Tecnólogo</option>
+                <option value="3">Universitario</option>
+                <option value="4">Especialización</option>
+                <option value="5">Maestría</option>
+                <option value="6">Doctorado</option>
+            </select>
+
+            <button type="submit" class="btn">Predecir</button>
+        </form>
+
+        {% if resultado %}
+            <h2>{{ resultado }}</h2>
+        {% endif %}
+
+        {% if grafico_url %}
+            <img src="data:image/png;base64,{{ grafico_url }}" alt="Gráfico">
+        {% endif %}
+
+        <div class="botones">
+            <a href="{{ url_for('home') }}" class="btn">Inicio</a>
+            <a href="{{ url_for('conceptos') }}" class="btn">Conceptos</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Universidad de Cundinamarca - Opinión ML</p>
+    </footer>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
