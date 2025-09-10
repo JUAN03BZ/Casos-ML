@@ -25,6 +25,14 @@
 </div>
 {% endif %}
 
+{% if grafico_url %}
+<div class="mt-4 text-center">
+  <h4>Visualización de la predicción</h4>
+  <img src="data:image/png;base64,{{ grafico_url }}" alt="Gráfico de predicción" class="img-fluid">
+</div>
+{% endif %}
+
+
 <!-- Botones de navegación -->
 <div class="mt-5 text-center">
   <a href="/index" class="btn btn-success me-3">🏠 Ir a Inicio</a>
