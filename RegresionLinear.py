@@ -1,21 +1,22 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-
+# Dataset sencillo: años de experiencia + nivel educativo
+# Nivel educativo: 1 = Secundaria, 2 = Técnico, 3 = Universitario, 4 = Posgrado
 data = {
-    "Study Hours": [10, 15, 12, 8, 14, 5, 16, 7, 11, 13, 9, 4, 18, 3, 17, 6, 14, 2, 20, 1],
-    "Final Grade": [3.8, 4.2, 3.6, 3, 4.5, 2.5, 4.8, 2.8, 3.7, 4, 3.2, 2.2, 5, 1.8, 4.9, 2.7, 4.4, 1.5, 5, 1]
+    "Experiencia": [1, 2, 3, 5, 7, 10, 12, 15],
+    "Educacion": [1, 2, 2, 3, 3, 4, 4, 4],
+    "Sueldo": [1200, 1500, 2000, 2800, 3500, 5000, 6000, 7500]
 }
 
 df = pd.DataFrame(data)
-x = df[["Study Hours"]]
-y = df[["Final Grade"]]
 
+X = df[["Experiencia", "Educacion"]]
+y = df["Sueldo"]
 
 model = LinearRegression()
-model.fit(x, y)
+model.fit(X, y)
 
-def calculate_grade(hours):
-    result = model.predict([[hours]])[0]
-    return result
+def predict_salary(experiencia, educacion):
+    result = model.predict([[experiencia, educacion]])[0]
+    return round(result, 2)

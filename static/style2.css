@@ -1,0 +1,9 @@
+header {
+    background-color: #2e7d32;
+    padding: 10px;
+    text-align: center;
+}
+
+header .logo {
+    height: 80px; /* Ajusta el tamaño del escudo */
+}

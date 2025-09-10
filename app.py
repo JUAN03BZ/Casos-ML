@@ -1,26 +1,28 @@
-from flask import Flask, request 
-from flask import render_template
+from flask import Flask, request, render_template
 import RegresionLinear
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
-    name=None
-    name = "Flask"
-    return f"Hello, {name}!"
+    return render_template("index.html")
 
-@app.route('/index')
+@app.route("/index")
 def index():
-    myname = "Flask"
-    return render_template('index.html', name=myname)
+    return render_template("index2.html")
 
-@app.route('/LR')
-def lr():
-    calculateResult = None
-    #if request.method == 'POST':
-    calculateResult = RegresionLinear.calculate_grade(5)
-    return "Final Grade Prediction: " + str(calculateResult)
+@app.route("/conceptos")
+def conceptos():
+    return render_template("conceptos.html")
 
-if __name__ == '__main__':
+@app.route("/practico", methods=["GET", "POST"])
+def practico():
+    result = None
+    if request.method == "POST":
+        experiencia = float(request.form["experiencia"])
+        educacion = float(request.form["educacion"])
+        result = RegresionLinear.predict_salary(experiencia, educacion)
+    return render_template("practico.html", result=result)
+
+if __name__ == "__main__":
     app.run(debug=True)
