@@ -11,11 +11,12 @@ except:
     except:
         pass
 
-# Dataset sencillo: años de experiencia + nivel educativo
+# años de experiencia + nivel educativo = Sueldo
 data = {
-    "Experiencia": [1, 2, 3, 5, 7, 10, 12, 15],
-    "Educacion": [1, 2, 3, 4, 5, 5, 6, 7],
-    "Sueldo": [1800000, 1500000, 2000000, 2400000, 3500000, 5000000, 6000000, 7500000]
+    "Experiencia": [1, 1, 2,2,3,3,4,4,6,6,8,8,10,10,12,12,14,14,15,15],
+    "Educacion":   [1, 7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,7],
+    "Sueldo": [1400000, 7000000,1600000,7300000,1700000,7500000,1800000,7700000 ,2000000,8000000,2200000
+               ,8300000,2300000,8600000,2400000,9000000,2500000,9800000,2700000,10000000],
 }
 
 df = pd.DataFrame(data)
@@ -27,7 +28,7 @@ model = LinearRegression()
 model.fit(X, y)
 
 # Salario mínimo 2025 (aprox.)
-SALARIO_MINIMO = 1600000  
+SALARIO_MINIMO = 1400000  
 
 def predict_salary(experiencia, educacion):
     """Predice el salario y lo devuelve en formato de pesos colombianos"""
