@@ -1,4 +1,4 @@
-/* Colores base */
+
 body {
   background-color: #f4f4f4;
 }
@@ -42,7 +42,6 @@ body {
   color: #0d6efd;
 }
 
-/* Botones principales */
 .btn-success, .btn-outline-success {
   border-radius: 30px;
   padding: 12px 25px;
