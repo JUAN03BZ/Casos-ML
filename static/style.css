@@ -1,64 +1,49 @@
-/* ============================
-   Estilos personalizados para la portada
-   ============================ */
 
-/* Fondo general */
 body {
-    background-color: #000000; /* Fondo negro */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
+  background-color: #f4f4f4;
 }
 
-/* Caja blanca centrada */
+.bg-dark-green {
+  background-color: #014d29 !important;
+}
+
+.footer {
+  background-color: #014d29;
+}
+
 .portada-box {
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
-    max-width: 700px;
-    width: 100%;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Títulos */
 .titulo-principal {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #013312;
-    margin-bottom: 10px;
-    text-transform: uppercase;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #014d29;
 }
 
 .subtitulo {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #014d29;
+  font-size: 1.8rem;
+  color: #017a45;
 }
 
 .subtitulo-2 {
-    font-size: 1.4rem;
-    font-weight: 400;
-    color: #6c757d;
+  font-size: 1.2rem;
+  color: #6c757d;
 }
 
-/* Lista de nombres */
 .nombres h4 {
-    font-weight: 400;
-    color: #343a40;
-    transition: color 0.3s ease;
+  color: #343a40;
+  transition: color 0.3s ease;
 }
 
 .nombres h4:hover {
-    color: #0d6efd;
+  color: #0d6efd;
 }
 
-/* Botón */
-.boton {
-    margin-top: 25px;
-    border-radius: 30px;
-    padding: 12px 35px;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-}
-
-.boton:hover {
-    transform: scale(1.08);
-    background-color: #0b5ed7;
+.btn-success, .btn-outline-success {
+  border-radius: 30px;
+  padding: 12px 25px;
+  font-size: 1.2rem;
 }

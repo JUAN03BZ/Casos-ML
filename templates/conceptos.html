@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Conceptos básicos de Regresión Lineal</h2>
+<p>
+  La regresión lineal es un modelo estadístico que permite predecir una variable dependiente 
+  a partir de una o más variables independientes. Es ampliamente utilizada en estadística 
+  y machine learning por su sencillez y efectividad.
+</p>
+
+<h4>Tipos de regresión Lineal:</h4>
+
+</ul>
+  <li><strong>Regresion lineal simple:</strong> se relaciona una única variable independiente con una variable dependiente. Por lo tanto, la ecuación de este tipo de modelo de regresión lineal es de la forma y=β0+β1x1.</li>
+  <li><strong>Resgresion lineal múltiple:</strong> el modelo de regresión tiene varias variables explicativas y una variable respuesta. Por lo tanto, la ecuación de este tipo de modelo de regresión lineal es de la forma y=β0+β1x1+β2x2…+βmxm.</li>
+</ul>
+
+<h4>Supuestos principales:</h4>
+<ul>
+  <li><strong>Linealidad:</strong> La relación entre variables es aproximadamente lineal.</li>
+  <li><strong>Independencia:</strong> Los errores son independientes entre sí.</li>
+  <li><strong>Homoscedasticidad:</strong> Los errores tienen varianza constante.</li>
+  <li><strong>Normalidad del error:</strong> Los errores siguen una distribución normal.</li>
+</ul>
+
+<h4>Referencias:</h4>
+<p>Montgomery, D. C., Peck, E. A., & Vining, G. G. (2021). <i>Introduction to Linear Regression Analysis</i>. Wiley.</p>
+<p>Wooldridge, J. M. (2016). <i>Introductory Econometrics: A Modern Approach</i>. Cengage Learning.</p>
+
+<!-- Botones de navegación -->
+<div class="mt-5 text-center">
+  <a href="/index" class="btn btn-success me-3">🏠 Ir a Inicio</a>
+  <a href="/practico" class="btn btn-outline-success">⚙ Ir al Ejercicio</a>
+</div>
+{% endblock %}
