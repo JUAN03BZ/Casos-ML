@@ -46,6 +46,8 @@ def practico():
         prob=prob,
         grafico_url=grafico_url,
         matriz_url=matriz_url,
+
+        
     )
 
 
