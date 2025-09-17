@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Ejercicio práctico - Regresión Logística</h2>
+<p>
+  Ingresa los datos del usuario y el modelo predecirá si es probable que <strong>compre o no</strong> el producto.
+</p>
+
+<form method="POST" class="mt-4">
+  <div class="mb-3">
+    <label class="form-label">Tiempo en la página (segundos)</label>
+    <input type="number" step="1" name="tiempo" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Número de clics</label>
+    <input type="number" name="clics" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Fuente de tráfico</label>
+    <select name="fuente" class="form-select" required>
+      <option value="Orgánico">Orgánico</option>
+      <option value="Pago">Pago</option>
+      <option value="Redes">Redes</option>
+      <option value="Directo">Directo</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Nivel de ingresos</label>
+    <select name="ingresos" class="form-select" required>
+      <option value="Bajo">Bajo</option>
+      <option value="Medio">Medio</option>
+      <option value="Alto">Alto</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-success">Predecir compra</button>
+</form>
+
+{% if resultado %}
+<div class="alert alert-info text-center fs-5">
+    <strong>Resultado:</strong> {{ resultado }} <br>
+    <strong>Probabilidad de compra:</strong> {{ prob }}%
+</div>
+{% endif %}
+
+{% if matriz_url %}
+<div class="text-center mt-5">
+  <h3>Matriz de Confusión</h3>
+  <img src="data:image/png;base64,{{ matriz_url }}" 
+       alt="Matriz de Confusión" 
+       class="img-fluid">
+  <p class="text-muted fst-italic mt-2">{{ mensaje_aclaratorio }}</p>
+</div>
+{% endif %}
+
+<div class="mt-5 text-center">
+  <a href="/home" class="btn btn-success me-3">🏠 Inicio</a>
+  <a href="/logistica/conceptos" class="btn btn-outline-success">📘 Ver Conceptos</a>
+</div>
+
+{% endblock %}
