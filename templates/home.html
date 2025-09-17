@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center">
+  <h1 class="mb-4">Proyecto de Regresión Logística</h1>
+  <p class="lead">
+    Este proyecto aplica la <strong>Regresión Logística</strong> para predecir si un usuario 
+    realizará una <strong>compra en línea</strong> en función de variables como 
+    <em>tiempo en el sitio, número de clics, fuente de tráfico e ingresos del usuario</em>.
+  </p>
+  <p>
+    En la sección <strong>Conceptos</strong> verás una explicación del modelo, 
+    y en <strong>Ejercicio</strong> podrás interactuar con un dataset realista de 200 registros.
+  </p>
+  <p class="mt-3"><strong>Exactitud del modelo:</strong> {{ accuracy }}%</p>
+
+  <div class="mt-5">
+    <a href="{{ url_for('conceptos') }}" class="btn btn-success btn-lg me-3">📘 Conceptos básicos</a>
+    <a href="{{ url_for('practico') }}" class="btn btn-outline-success btn-lg">⚙️ Ejercicio práctico</a>
+  </div>
+</div>
+{% endblock %}
