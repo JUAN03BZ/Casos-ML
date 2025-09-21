@@ -8,9 +8,12 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io, base64
+import os
 
-# Cargar datos
-df = pd.read_csv("Datos.csv")
+dir_actual = os.path.dirname(os.path.abspath(__file__))
+ruta_csv = os.path.join(dir_actual, "Datos.csv")
+
+df = pd.read_csv(ruta_csv)
 
 # Variables independientes y dependiente
 X = df[["Tiempo_Pagina", "Num_Clics", "Fuente_Trafico", "Nivel_Ingresos"]]
