@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 app = Flask(__name__)
 from flask import Flask, request, render_template
-import Arreglos.RegresionLinear as RegresionLinear
+import RegresionLinear as RegresionLinear
 import matplotlib
 matplotlib.use("Agg") 
 import matplotlib.pyplot as plt
