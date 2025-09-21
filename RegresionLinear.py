@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import locale
 
-# Configurar locale para formato colombiano
+
 try:
     locale.setlocale(locale.LC_ALL, "es_CO.UTF-8") 
 except:
@@ -27,7 +27,7 @@ y = df["Sueldo"]
 model = LinearRegression()
 model.fit(X, y)
 
-# Salario mínimo 2025 (aprox.)
+
 SALARIO_MINIMO = 1400000  
 
 def predict_salary(experiencia, educacion):
