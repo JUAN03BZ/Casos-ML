@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Contenido principal -->
+<div class="container text-center py-5">
+  <h1 class="titulo-principal">
+    El Dilema de la IA: <span class="resaltado">Entre la Promesa de un Futuro Brillante y lo que No Nos Cuentan</span>
+  </h1>
+
+  <!-- Sección de características -->
+  <section class="features flex-grow-1 pb-5 mt-4 text-start">
+    <div class="feature-card mb-4">
+      <h2 class="titulo-cuadro">🤖 ¿Qué es?</h2>
+      <p>
+        Es el arte y la ciencia de enseñar a las computadoras a aprender de los datos para tomar decisiones o hacer predicciones 
+        <strong>sin estar programadas explícitamente para cada tarea</strong>. 
+        Piensa en ello como un sistema que descubre patrones por sí mismo.
+      </p>
+    </div>
+
+    <div class="feature-card mb-4">
+      <h2 class="titulo-cuadro">⚙️ ¿Cómo funciona?</h2>
+      <p>
+        Imagina que es como un niño que aprende. Se le muestran 
+        <strong>millones de ejemplos (datos)</strong>. Encuentra patrones y relaciones en ellos, 
+        y construye un <strong>modelo interno</strong>. 
+        Cuando ve algo nuevo, usa ese modelo para reconocerlo, clasificarlo o predecir un resultado.
+      </p>
+    </div>
+
+    <div class="feature-card highlight-good mb-4">
+      <h2 class="titulo-cuadro">✨ Lo Bueno</h2>
+      <ul>
+        <li>Diagnósticos médicos más precisos y tempranos.</li>
+        <li>Automatización de tareas repetitivas y peligrosas.</li>
+        <li>Recomendaciones personalizadas (música, series, productos).</li>
+        <li>Avances en investigación científica (descubrimiento de nuevos materiales, fármacos).</li>
+      </ul>
+    </div>
+
+    <div class="feature-card highlight-bad mb-4">
+      <h2 class="titulo-cuadro">⚠️ Lo Malo</h2>
+      <ul>
+        <li><strong>Sesgos algorítmicos:</strong> Puede perpetuar discriminaciones presentes en los datos de entrenamiento.</li>
+        <li>Falta de transparencia: Muchos modelos son "cajas negras" difíciles de entender.</li>
+        <li>Pérdida de privacidad: Se alimenta de grandes cantidades de datos personales.</li>
+        <li>Desplazamiento laboral: Puede automatizar puestos de trabajo completos.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+
+<div class="text-center mt-2 mb-4">
+  <a href="/" class="btn btn-mejorado btn-mejorado-primary me-2">⬅️ Volver a Portada</a>
+  <a href="/casos" class="btn btn-mejorado btn-mejorado-primary">📌 Casos de uso</a>
+</div>
+
+
+{% endblock %}

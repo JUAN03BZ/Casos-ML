@@ -1,9 +1,11 @@
 header {
-    background-color: #2e7d32;
-    padding: 10px;
-    text-align: center;
+  background-color: #014d29; 
+  padding: 10px;
+  text-align: center;
 }
 
+
 header .logo {
-    height: 80px; /* Tamaño escudo */
+  height: 80px; 
 }
+

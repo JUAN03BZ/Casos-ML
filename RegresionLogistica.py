@@ -8,18 +8,21 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io, base64
+import os
 
-# Cargar datos
-df = pd.read_csv("Datos.csv")
+dir_actual = os.path.dirname(os.path.abspath(__file__))
+ruta_csv = os.path.join(dir_actual, "Datos.csv")
 
-# Variables independientes y dependiente
+df = pd.read_csv(ruta_csv)
+
+
 X = df[["Tiempo_Pagina", "Num_Clics", "Fuente_Trafico", "Nivel_Ingresos"]]
 y = df["Compra"]
 
-# Columnas categóricas
+
 categorical_features = ["Fuente_Trafico", "Nivel_Ingresos"]
 
-# Definimos preprocesador para columnas categóricas y escalado para numéricas
+
 preprocessor = ColumnTransformer(
     transformers=[
         ("cat", OneHotEncoder(drop="first", handle_unknown="ignore"), categorical_features),
@@ -27,20 +30,20 @@ preprocessor = ColumnTransformer(
     ]
 )
 
-# Construimos pipeline con preprocesador + clasificador
+
 model = Pipeline(steps=[
     ("preprocessor", preprocessor),
     ("classifier", LogisticRegression(max_iter=1000, solver="lbfgs"))
 ])
 
-# Separar datos y entrenar modelo una vez
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 model.fit(X_train, y_train)
 
 def predecir_compra(tiempo, clics, fuente, ingresos):
-    # Crear dataframe de un solo registro con los datos del formulario
+    
     nuevo = pd.DataFrame(
         [[tiempo, clics, fuente, ingresos]],
         columns=["Tiempo_Pagina", "Num_Clics", "Fuente_Trafico", "Nivel_Ingresos"]
