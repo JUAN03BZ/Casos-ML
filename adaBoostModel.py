@@ -71,6 +71,7 @@ def evaluate():
     acc = round(accuracy_score(y_test, y_pred), 4)
     report = classification_report(y_test, y_pred, output_dict=True)
     matrix = confusion_matrix(y_test, y_pred)
+    
 
     fig, ax = plt.subplots(figsize=(5, 5))
     disp = ConfusionMatrixDisplay(confusion_matrix=matrix, display_labels=["No satisfecho", "Satisfecho"])
