@@ -102,6 +102,7 @@
   <h3>Predicción: <strong>{{ prediction_result }}</strong></h3>
   <h5>Probabilidad: {{ "%.4f"|format(prediction_prob if prediction_prob is not none else 0) }}</h5>
   <p>
+    
     {% if threshold|float < 0.5 %}
       Con umbral menor a 0.5 ({{ threshold }}) la sensibilidad aumenta, previendo más casos positivos.
     {% elif threshold|float > 0.5 %}
