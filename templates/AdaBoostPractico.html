@@ -77,7 +77,7 @@
         <option value="">Seleccione...</option>
         <option value="Amable" {% if request.form.tono_agente == 'Amable' %}selected{% endif %}>Amable</option>
         <option value="Neutral" {% if request.form.tono_agente == 'Neutral' %}selected{% endif %}>Neutral</option>
-        <option value="Hostil" {% if request.form.tono_agente == 'Hostil' %}selected{% endif %}>Hostil</option>
+        <option value="Hostil" {% if request.form.tono_agente == 'Hostil' %}selected{% endif %}>Descortés</option>
       </select>
     </div>
     <div class="mb-3">
@@ -86,6 +86,7 @@
         <option value="">Seleccione...</option>
         <option value="Chat" {% if request.form.canal_contacto == 'Chat' %}selected{% endif %}>Chat</option>
         <option value="Teléfono" {% if request.form.canal_contacto == 'Teléfono' %}selected{% endif %}>Teléfono</option>
+        <option value="Correo" {% if request.form.canal_contacto == 'Correo' %}selected{% endif %}>Correo</option>
       </select>
     </div>
     <div class="mb-3">

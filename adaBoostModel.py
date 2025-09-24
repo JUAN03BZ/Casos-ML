@@ -31,6 +31,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 cat_features = ['Tono agente', 'Canal contacto']
 num_features = ['Tiempo atencion', 'Resolucion problema']
 
+# Las opciones de las variables categóricas
+tono_agente_opciones = ['Descortés', 'Neutral', 'Amable']
+canal_contacto_opciones = ['Teléfono', 'Correo', 'Chat']
+
+
 
 numeric_transformer = Pipeline([
     ('imputer', SimpleImputer(strategy='mean')), 
