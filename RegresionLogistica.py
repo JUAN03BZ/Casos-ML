@@ -79,3 +79,4 @@ def obtener_matriz_confusion():
     plt.close()
     img.seek(0)
     return base64.b64encode(img.getvalue()).decode("utf-8")
+

@@ -42,3 +42,4 @@ def predict_salary(experiencia, educacion):
     except:
         return f"${result:,.0f} COP"
     
+    
