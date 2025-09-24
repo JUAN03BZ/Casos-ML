@@ -16,6 +16,7 @@ RANDOM_STATE = 42
 def load_data():
     
     df = pd.read_csv("satisfaccion_cliente.csv")
+    
 
     return df
 
