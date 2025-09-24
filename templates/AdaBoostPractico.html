@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow p-3 mb-4">
+  <h2 class="text-center">Caso Práctico: AdaBoost - Satisfacción del Cliente</h2>
+  <p>Variables independientes:</p>
+  <ul>
+    <li>Tiempo de atención (numérico)</li>
+    <li>Resolución del problema (0 = No, 1 = Sí)</li>
+    <li>Tono del agente (Amable, Neutral, Hostil)</li>
+    <li>Canal de contacto (Chat, Teléfono)</li>
+  </ul>
+  <p>Clase positiva: Satisfecho = Sí (1), negativa: No satisfecho = No (0)</p>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card text-bg-primary p-3">
+      <h5>Exactitud</h5>
+      <p class="display-6">{{ metrics['accuracy'] }}</p>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card p-3">
+      <h5>Reporte de Clasificación</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Clase</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-score</th>
+            <th>Support</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for clase, val in metrics['classification_report'].items() %}
+            {% if clase != 'accuracy' and clase != 'macro avg' and clase != 'weighted avg' %}
+            <tr>
+              <td>{{ clase }}</td>
+              <td>{{ "%.4f"|format(val.precision) }}</td>
+              <td>{{ "%.4f"|format(val.recall) }}</td>
+              <td>{{ "%.4f"|format(val['f1-score']) }}</td>
+              <td>{{ val.support }}</td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card p-3 mb-4 text-center">
+  <h5>Matriz de Confusión</h5>
+  <img src="data:image/png;base64,{{ metrics['confusion_matrix_img'] }}" alt="Matriz de Confusión" class="img-fluid mx-auto" style="max-width:400px;">
+</div>
+
+<div class="card p-3">
+  <h5>Formulario de Predicción</h5>
+  <form method="POST" novalidate>
+    <div class="mb-3">
+      <label for="tiempo_atencion" class="form-label">Tiempo de atención (minutos 1-60)</label>
+      <input type="number" step="0.01" min="0" class="form-control" id="tiempo_atencion" name="tiempo_atencion" required value="{{ request.form.tiempo_atencion or '' }}">
+    </div>
+    <div class="mb-3">
+      <label for="resolucion_problema" class="form-label">Resolución del problema</label>
+      <select class="form-select" id="resolucion_problema" name="resolucion_problema" required>
+        <option value="">Seleccione...</option>
+        <option value="1" {% if request.form.resolucion_problema == '1' %}selected{% endif %}>Sí</option>
+        <option value="0" {% if request.form.resolucion_problema == '0' %}selected{% endif %}>No</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="tono_agente" class="form-label">Tono del agente</label>
+      <select class="form-select" id="tono_agente" name="tono_agente" required>
+        <option value="">Seleccione...</option>
+        <option value="Amable" {% if request.form.tono_agente == 'Amable' %}selected{% endif %}>Amable</option>
+        <option value="Neutral" {% if request.form.tono_agente == 'Neutral' %}selected{% endif %}>Neutral</option>
+        <option value="Hostil" {% if request.form.tono_agente == 'Hostil' %}selected{% endif %}>Hostil</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="canal_contacto" class="form-label">Canal de contacto</label>
+      <select class="form-select" id="canal_contacto" name="canal_contacto" required>
+        <option value="">Seleccione...</option>
+        <option value="Chat" {% if request.form.canal_contacto == 'Chat' %}selected{% endif %}>Chat</option>
+        <option value="Teléfono" {% if request.form.canal_contacto == 'Teléfono' %}selected{% endif %}>Teléfono</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="threshold" class="form-label">Umbral (threshold) para clasificación (opcional, default 0.5)</label>
+      <input type="number" step="0.01" min="0" max="1" class="form-control" id="threshold" name="threshold" value="{{ threshold }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Predecir</button>
+  </form>
+</div>
+
+{% if prediction_result is not none %}
+<div class="card mt-4 p-4 text-center">
+  <h3>Predicción: <strong>{{ prediction_result }}</strong></h3>
+  <h5>Probabilidad: {{ "%.4f"|format(prediction_prob if prediction_prob is not none else 0) }}</h5>
+  <p>
+    {% if threshold|float < 0.5 %}
+      Con umbral menor a 0.5 ({{ threshold }}) la sensibilidad aumenta, previendo más casos positivos.
+    {% elif threshold|float > 0.5 %}
+      Con umbral mayor a 0.5 ({{ threshold }}) la precisión aumenta, reduciendo falsos positivos.
+    {% else %}
+      Umbral estándar 0.5 balancea sensibilidad y precisión.
+    {% endif %}
+  </p>
+</div>
+{% endif %}
+{% endblock %}

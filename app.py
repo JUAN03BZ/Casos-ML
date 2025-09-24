@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import io
 import base64
 import RegresionLogistica as Rl
+import adaBoostModel
 
 @app.route("/")
 def home():
@@ -168,7 +169,43 @@ def LRpractico():
     )
 
 
+@app.route("/AdaBoostConceptos")
+def AdaBoostConceptos():
+    return render_template("AdaBoostConceptos.html", title="Conceptos AdaBoost")
+
+@app.route("/AdaBoostPractico", methods=["GET", "POST"])
+def AdaBoostPractico():
+    metrics = adaBoostModel.evaluate()
+    prediction_result = None
+    prediction_prob = None
+    threshold = 0.5
+
+    if request.method == "POST":
+        try:
+            features = {
+                'Tiempo atencion': float(request.form['tiempo_atencion']),
+                'Resolucion problema': int(request.form['resolucion_problema']),
+                'Tono agente': request.form['tono_agente'],
+                'Canal contacto': request.form['canal_contacto']
+            }
+            if request.form.get('threshold'):
+                threshold = float(request.form['threshold'])
+            prediction_result, prediction_prob = adaBoostModel.predict_label(features, threshold)
+        except Exception as e:
+            prediction_result = f"Error en la predicción: {str(e)}"
+
+    return render_template(
+        "AdaBoostPractico.html",
+        title="Caso práctico AdaBoost",
+        metrics=metrics,
+        prediction_result=prediction_result,
+        prediction_prob=prediction_prob,
+        threshold=threshold
+    )
+
+
+
 if __name__ == "__main__":
 
     app.run(debug=True)
-    
+
