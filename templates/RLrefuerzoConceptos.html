@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Concepto Aprendizaje por refuerzo</h2>
+<p>
+El Aprendizaje por Refuerzo (RL) es un paradigma de aprendizaje automático donde un agente aprende a tomar decisiones mediante interacción directa con un entorno.
+El agente ejecuta acciones, recibe recompensas y observa nuevos estados, con el objetivo de maximizar la recompensa acumulada a largo plazo.
+</p>
+
+<h4>Componentes del modelo RL:</h4>
+
+</ul>
+  <li><strong>Agente:</strong> Entidad que toma decisiones y aprende qué acción realizar.</li>
+  <li><strong>Entorno:</strong> El “mundo” con el que el agente interactúa. Devuelve estados y recompensas.</li>
+  <li><strong>Estado:</strong> Descripción del entorno en un momento específico.</li>
+  <li><strong>Acción:</strong> Las decisiones que el agente puede tomar.</li>
+  <li><strong>Recompensa:</strong> Número que indica qué tan buena fue la acción.</li>
+  <li><strong>Política:</strong> Estrategia que usa el agente para elegir acciones basadas en estados.</li>
+</ul>
+
+<h4>Principios del ciclo de aprendizaje:</h4>
+<ul>
+ <li><strong>Exploración vs. Explotación:</strong> La relación entre variables es aproximadamente lineal.</li> 
+  Exploración: probar nuevas acciones para descubrir mejores recompensas.<br>  
+  Explotación: usar el conocimiento actual para obtener recompensa inmediata. 
+    <li><strong>Retorno acumulado:</strong> Los errores son independientes entre sí.</li> 
+
+    <li><strong>Descuento temporal (γ):</strong> Los errores tienen varianza constante.</li> 
+</ul>
+
+<h4>Referencias:</h4>
+<p>Montgomery, D. C., Peck, E. A., & Vining, G. G. (2021). <i>Introduction to Linear Regression Analysis</i>. Wiley.</p>
+<p>Wooldridge, J. M. (2016). <i>Introductory Econometrics: A Modern Approach</i>. Cengage Learning.</p>
+
+<div class="mt-5 text-center">
+  <a href="/index2" class="btn btn-success me-3">🏠 Ir a Inicio</a>
+  <a href="/RLpractico" class="btn btn-outline-success">📘 Ver Ejercicio</a>
+</div>
+
+{% endblock %}
