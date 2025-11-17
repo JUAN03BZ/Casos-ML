@@ -199,6 +199,10 @@ def AdaBoostPractico():
         threshold=threshold
     )
 
+@app.route("/RLrefuerzoConceptos", methods=["GET"])
+def RLrefuerzoConceptos():
+    # Puedes pasar variables a la plantilla según tu necesidad
+    return render_template("RLrefuerzoConceptos.html", title="Conceptos Aprendizaje por Refuerzo")
 
 
 if __name__ == "__main__":
