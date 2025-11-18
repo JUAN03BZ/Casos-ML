@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-8">
+    <h2 class="mt-3">Conceptos de Aprendizaje por Refuerzo</h2>
+  </div>
+  <div class="col-md-4 text-end">
+    <a href="/RLrefuerzoPractico" class="btn btn-outline-primary mt-3"> Probar Caso Práctico</a>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p class="lead mb-0">
+      El Aprendizaje por Refuerzo (RL) es un paradigma de aprendizaje automático donde un agente 
+      aprende a tomar decisiones mediante interacción directa con un entorno. A diferencia del 
+      aprendizaje supervisado, el agente no recibe ejemplos etiquetados sino que aprende mediante 
+      prueba y error, recibiendo recompensas por sus acciones.
+    </p>
+  </div>
+</div>
+
+<h4> Componentes del modelo RL:</h4>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          <li class="mb-3">
+            <strong> Agente:</strong><br>
+            <small class="text-muted">Entidad que toma decisiones y aprende qué acción realizar</small>
+          </li>
+          <li class="mb-3">
+            <strong> Entorno:</strong><br>
+            <small class="text-muted">El "mundo" con el que el agente interactúa</small>
+          </li>
+          <li class="mb-3">
+            <strong> Estado:</strong><br>
+            <small class="text-muted">Descripción del entorno en un momento específico</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <ul class="list-unstyled">
+          <li class="mb-3">
+            <strong> Acción:</strong><br>
+            <small class="text-muted">Decisiones que el agente puede tomar</small>
+          </li>
+          <li class="mb-3">
+            <strong> Recompensa:</strong><br>
+            <small class="text-muted">Feedback numérico sobre la calidad de la acción</small>
+          </li>
+          <li class="mb-3">
+            <strong> Política:</strong><br>
+            <small class="text-muted">Estrategia para elegir acciones basadas en estados</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4"> Principios del ciclo de aprendizaje:</h4>
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h6> Exploración vs.  Explotación</h6>
+        <p class="small text-muted">
+          <strong>Exploración:</strong> Probar nuevas acciones para descubrir mejores recompensas<br>
+          <strong>Explotación:</strong> Usar el conocimiento actual para obtener recompensa inmediata
+        </p>
+      </div>
+      <div class="col-md-6">
+        <h6> Descuento temporal (γ)</h6>
+        <p class="small text-muted">
+          Las recompensas futuras se descuentan usando un factor gamma para preferir 
+          recompensas inmediatas sobre las distantes
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4> Principales algoritmos de RL:</h4>
+<div class="row">
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6>Q-Learning</h6>
+        <p class="small">Algoritmo basado en tablas que aprende el valor esperado de acciones. No requiere conocer el modelo del entorno.</p>
+        <span class="badge bg-light text-dark small">Off-policy</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6>SARSA</h6>
+        <p class="small">Similar a Q-Learning pero actualiza basado en la acción realmente tomada, más conservador.</p>
+        <span class="badge bg-light text-dark small">On-policy</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6>Deep Q-Network</h6>
+        <p class="small">Usa redes neuronales para aproximar la función Q, permitiendo espacios de estado grandes.</p>
+        <span class="badge bg-light text-dark small">Deep Learning</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4"> Consideraciones prácticas:</h4>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="list-unstyled">
+          <li class="mb-2"> <strong>Estabilidad del aprendizaje</strong></li>
+          <li class="mb-2"> <strong>Tasa de exploración balanceada</strong></li>
+          <li class="mb-2"> <strong>Diseño de recompensas</strong></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-unstyled">
+          <li class="mb-2"> <strong>Convergencia de la política</strong></li>
+          <li class="mb-2"> <strong>Generalización a nuevos escenarios</strong></li>
+          <li class="mb-2"> <strong>Manejo de espacios grandes</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4"> Referencias académicas:</h4>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-2">
+      <strong>Sutton & Barto (2018)</strong> - 
+      <em>Reinforcement Learning: An Introduction</em> - MIT Press
+    </p>
+    <p class="mb-2">
+      <strong>Mnih et al. (2015)</strong> - 
+      <em>Human-level control through deep reinforcement learning</em> - Nature
+    </p>
+    <p class="mb-0">
+      <strong>Russell & Norvig (2021)</strong> - 
+      <em>Artificial Intelligence: A Modern Approach</em> - Pearson
+    </p>
+  </div>
+</div>
+
+<div class="mt-5 text-center">
+  <a href="/index2" class="btn btn-success me-3">🏠 Ir a Inicio</a>
+  <a href="/RLrefuerzoPractico" class="btn btn-primary">🎮 Ver Caso Práctico</a>
+</div>
+
+{% endblock %}

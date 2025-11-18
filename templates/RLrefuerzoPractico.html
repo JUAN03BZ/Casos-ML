@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mt-3">Caso Práctico – Entrenamiento del Agente RL</h2>
+
+<p class="lead">
+En esta sección puedes entrenar un agente utilizando Q-Learning en un entorno GridWorld. 
+El agente interactúa con el entorno, mejora su política mediante prueba y error, y al final 
+podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
+</p>
+
+<hr>
+
+<!-- Sección de Parámetros Mejorada -->
+<div class="row">
+  <div class="col-md-12">
+    <h4> Parámetros del Entrenamiento</h4>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <p><strong>α (Tasa de aprendizaje):</strong><br>
+               <span class="badge bg-primary fs-6">{{ alpha }}</span>
+               <small class="text-muted d-block">Controla cuánto aprende de nuevas experiencias</small>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>γ (Factor de descuento):</strong><br>
+               <span class="badge bg-success fs-6">{{ gamma }}</span>
+               <small class="text-muted d-block">Valor de las recompensas futuras</small>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>ε (Exploración inicial):</strong><br>
+               <span class="badge bg-warning text-dark fs-6">{{ epsilon }}</span>
+               <small class="text-muted d-block">Probabilidad de explorar vs explotar</small>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Episodios:</strong><br>
+               <span class="badge bg-info fs-6">{{ episodes }}</span>
+               <small class="text-muted d-block">Número de sesiones de entrenamiento</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Sección de Entorno -->
+<h4> Entorno GridWorld</h4>
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h6>Acciones disponibles:</h6>
+        {% for action in actions %}
+        <span class="badge bg-secondary me-1">{{ action }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h6>Recompensas:</h6>
+        <span class="badge bg-success me-2">Meta: +10</span>
+        <span class="badge bg-danger me-2">Obstáculo: -5</span>
+        <span class="badge bg-secondary">Movimiento: 0</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botones de Control Mejorados -->
+<div class="text-center my-4">
+  <button id="trainBtn" class="btn btn-primary btn-lg">
+     Entrenar Agente
+  </button>
+  <button id="testBtn" class="btn btn-success btn-lg ms-3" {% if not trained %}disabled{% endif %}>
+     Probar Política Aprendida
+  </button>
+  <button id="resetBtn" class="btn btn-outline-secondary btn-lg ms-3">
+     Reiniciar
+  </button>
+</div>
+
+<!-- Indicador de Progreso -->
+<div id="trainingProgress" class="alert alert-info d-none text-center">
+  <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+  <span id="progressText">Entrenando agente... Esto puede tomar unos segundos.</span>
+</div>
+
+<hr>
+
+<!-- Sección de Resultados -->
+<div class="row">
+  <div class="col-md-12">
+    <h4 class="mt-4"> Evolución de la Recompensa</h4>
+    <p class="text-muted">
+      El gráfico muestra la recompensa acumulada durante los episodios de entrenamiento. 
+      Una línea ascendente indica que el agente está aprendiendo a maximizar sus recompensas.
+    </p>
+    
+    <div class="card">
+      <div class="card-body text-center">
+        <img id="rewardPlot" src="/static/rewards.png?{{ timestamp }}" 
+             alt="Gráfico de Recompensas" class="img-fluid rounded border"
+             onerror="this.style.display='none'">
+        <div id="rewardPlaceholder" class="text-muted mt-3">
+          {% if not trained %}
+          <div class="alert alert-warning">
+            <i class="fas fa-chart-line me-2"></i>
+            Ejecuta el entrenamiento para generar la gráfica de recompensas
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Sección de Política -->
+<div class="row">
+  <div class="col-md-12">
+    <h4 class="mt-4"> Trayectoria del Agente</h4>
+    <p class="text-muted">
+      Visualización de la ruta óptima que el agente aprendió para ir desde el inicio (S) 
+      hasta la meta (G), evitando el obstáculo (X).
+    </p>
+    
+    <div class="card">
+      <div class="card-body text-center">
+        <img id="trajectoryPlot" src="/static/trajectory.png?{{ timestamp }}" 
+             alt="Trayectoria del Agente" class="img-fluid border"
+             onerror="this.style.display='none'">
+        <div id="trajectoryPlaceholder" class="text-muted mt-3">
+          {% if not tested %}
+          <div class="alert alert-info">
+            <i class="fas fa-route me-2"></i>
+            Ejecuta "Probar política" para visualizar la trayectoria aprendida
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Información del Estado -->
+{% if trained %}
+<div class="alert alert-success mt-4">
+  <h5><i class="fas fa-check-circle me-2"></i>Modelo Entrenado</h5>
+  <p class="mb-0">El agente ha completado el entrenamiento. Ahora puedes probar la política aprendida.</p>
+</div>
+{% endif %}
+
+<!-- Navegación -->
+<div class="mt-5 text-center">
+  <a href="/RLrefuerzoConceptos" class="btn btn-outline-secondary me-2"> Volver a Conceptos</a>
+  <a href="/index2" class="btn btn-success ms-2"> Ir a Inicio</a>
+</div>
+
+<script>
+// Variables de estado
+let isTraining = false;
+
+// -----------------------------
+// BOTÓN ENTRENAR - MEJORADO
+// -----------------------------
+document.getElementById("trainBtn").onclick = function () {
+    if (isTraining) {
+        alert("El entrenamiento ya está en progreso...");
+        return;
+    }
+    
+    isTraining = true;
+    const progressDiv = document.getElementById("trainingProgress");
+    const progressText = document.getElementById("progressText");
+    const testBtn = document.getElementById("testBtn");
+    const rewardImg = document.getElementById("rewardPlot");
+    const rewardPlaceholder = document.getElementById("rewardPlaceholder");
+    
+    // Mostrar progreso
+    progressDiv.classList.remove("d-none");
+    this.disabled = true;
+    progressText.textContent = "Entrenando agente... Esto puede tomar unos segundos.";
+    
+    // Ocultar placeholder si existe
+    if (rewardPlaceholder) {
+        rewardPlaceholder.style.display = 'none';
+    }
+    
+    // ENVIAR DATOS JSON CORRECTAMENTE
+    const trainingData = {
+        alpha: {{ alpha }},
+        gamma: {{ gamma }},
+        epsilon: {{ epsilon }},
+        episodes: {{ episodes }}
+    };
+    
+    console.log("Enviando datos de entrenamiento:", trainingData);
+    
+    fetch("/train_RL", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(trainingData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.message || `Error HTTP: ${response.status}`);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "success") {
+            progressText.innerHTML = " <strong>Entrenamiento completado!</strong> Actualizando gráficas...";
+            
+            // Forzar recarga de la imagen con timestamp único
+            setTimeout(() => {
+                const timestamp = new Date().getTime();
+                rewardImg.src = "/static/rewards.png?" + timestamp;
+                rewardImg.style.display = "block";
+                
+                // Verificar si la imagen se cargó correctamente
+                rewardImg.onload = function() {
+                    console.log("✓ Imagen de recompensas cargada correctamente");
+                    progressText.innerHTML = " <strong>Entrenamiento completado!</strong>";
+                    
+                    // Habilitar botón de prueba
+                    testBtn.disabled = false;
+                    
+                    // Ocultar progreso después de un tiempo
+                    setTimeout(() => {
+                        progressDiv.classList.add("d-none");
+                        document.getElementById("trainBtn").disabled = false;
+                        isTraining = false;
+                        
+                        // Mostrar mensaje de éxito
+                        showAlert(" Entrenamiento completado exitosamente! La gráfica se ha actualizado.", "success");
+                    }, 1000);
+                };
+                
+                rewardImg.onerror = function() {
+                    console.error(" Error cargando la imagen de recompensas");
+                    progressText.innerHTML = " <strong>Entrenamiento completado!</strong> (Error cargando gráfica)";
+                    showAlert(" Entrenamiento completado pero hubo un error cargando la gráfica. Intenta recargar la página.", "warning");
+                    document.getElementById("trainBtn").disabled = false;
+                    isTraining = false;
+                };
+                
+            }, 1000);
+        } else {
+            throw new Error(data.message || "Error desconocido");
+        }
+    })
+    .catch(error => {
+        console.error("Error en entrenamiento:", error);
+        progressText.innerHTML = " <strong>Error durante el entrenamiento:</strong> " + error.message;
+        document.getElementById("trainBtn").disabled = false;
+        isTraining = false;
+        showAlert("Error en el entrenamiento: " + error.message, "danger");
+    });
+};
+
+// -----------------------------
+// BOTÓN PROBAR POLÍTICA - MEJORADO
+// -----------------------------
+document.getElementById("testBtn").onclick = function () {
+    if (isTraining) {
+        alert("Espera a que termine el entrenamiento actual");
+        return;
+    }
+    
+    this.disabled = true;
+    const progressDiv = document.getElementById("trainingProgress");
+    const progressText = document.getElementById("progressText");
+    const trajectoryImg = document.getElementById("trajectoryPlot");
+    const trajectoryPlaceholder = document.getElementById("trajectoryPlaceholder");
+    
+    progressDiv.classList.remove("d-none");
+    progressText.textContent = "Ejecutando simulación con política aprendida...";
+    
+    // Ocultar placeholder si existe
+    if (trajectoryPlaceholder) {
+        trajectoryPlaceholder.style.display = 'none';
+    }
+    
+    // ENVIAR SOLICITUD VACÍA PERO CON HEADERS CORRECTOS
+    fetch("/test_RL", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}) // Envía un objeto vacío pero válido
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.message || `Error HTTP: ${response.status}`);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "success") {
+            progressText.innerHTML = " <strong>Simulación completada!</strong> Actualizando trayectoria...";
+            
+            setTimeout(() => {
+                const timestamp = new Date().getTime();
+                trajectoryImg.src = "/static/trajectory.png?" + timestamp;
+                trajectoryImg.style.display = "block";
+                
+                // Verificar si la imagen se cargó correctamente
+                trajectoryImg.onload = function() {
+                    console.log("✓ Imagen de trayectoria cargada correctamente");
+                    progressText.innerHTML = " <strong>Simulación completada!</strong>";
+                    
+                    setTimeout(() => {
+                        progressDiv.classList.add("d-none");
+                        document.getElementById("testBtn").disabled = false;
+                        showAlert(" Trayectoria generada exitosamente!", "success");
+                    }, 1000);
+                };
+                
+                trajectoryImg.onerror = function() {
+                    console.error(" Error cargando la imagen de trayectoria");
+                    progressText.innerHTML = " <strong>Simulación completada!</strong> (Error cargando trayectoria)";
+                    showAlert(" Simulación completada pero hubo un error cargando la trayectoria. Intenta recargar la página.", "warning");
+                    document.getElementById("testBtn").disabled = false;
+                };
+                
+            }, 1000);
+        } else {
+            throw new Error(data.message || "Error desconocido");
+        }
+    })
+    .catch(error => {
+        console.error("Error en simulación:", error);
+        progressText.innerHTML = " <strong>Error en la simulación:</strong> " + error.message;
+        this.disabled = false;
+        showAlert("Error en la simulación: " + error.message, "danger");
+    });
+};
+
+// -----------------------------
+// BOTÓN REINICIAR
+// -----------------------------
+document.getElementById("resetBtn").onclick = function () {
+    if (confirm("¿Estás seguro de que quieres reiniciar? Se perderá el progreso actual del entrenamiento.")) {
+        window.location.reload();
+    }
+};
+
+// -----------------------------
+// FUNCIÓN AUXILIAR PARA ALERTAS
+// -----------------------------
+function showAlert(message, type) {
+    // Remover alertas anteriores
+    const existingAlerts = document.querySelectorAll('.alert.alert-dismissible');
+    existingAlerts.forEach(alert => alert.remove());
+    
+    const alertDiv = document.createElement("div");
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    // Insertar después del primer hr
+    const firstHr = document.querySelector("hr");
+    if (firstHr) {
+        firstHr.after(alertDiv);
+    } else {
+        document.querySelector(".text-center.mt-4").after(alertDiv);
+    }
+    
+    // Auto-remover después de 5 segundos
+    setTimeout(() => {
+        if (alertDiv.parentElement) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+// -----------------------------
+// MANEJO DE ERRORES DE IMAGEN AL CARGAR LA PÁGINA
+// -----------------------------
+document.addEventListener('DOMContentLoaded', function() {
+    const rewardImg = document.getElementById("rewardPlot");
+    const trajectoryImg = document.getElementById("trajectoryPlot");
+    
+    rewardImg.onerror = function() {
+        console.log(" Imagen de recompensas no disponible");
+        const placeholder = document.getElementById("rewardPlaceholder");
+        if (placeholder) {
+            placeholder.innerHTML = '<div class="alert alert-warning mt-3"><i class="fas fa-exclamation-triangle me-2"></i>Ejecuta el entrenamiento para generar la gráfica de recompensas</div>';
+            placeholder.style.display = 'block';
+        }
+    };
+    
+    trajectoryImg.onerror = function() {
+        console.log(" Imagen de trayectoria no disponible");
+        const placeholder = document.getElementById("trajectoryPlaceholder");
+        if (placeholder) {
+            placeholder.innerHTML = '<div class="alert alert-info mt-3"><i class="fas fa-info-circle me-2"></i>Ejecuta "Probar política" para generar la trayectoria</div>';
+            placeholder.style.display = 'block';
+        }
+    };
+    
+    // Verificar imágenes al cargar
+    setTimeout(() => {
+        if (rewardImg.naturalWidth === 0) {
+            rewardImg.onerror();
+        }
+        if (trajectoryImg.naturalWidth === 0) {
+            trajectoryImg.onerror();
+        }
+    }, 1000);
+});
+</script>
+
+{% endblock %}
