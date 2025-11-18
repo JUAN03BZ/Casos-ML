@@ -44,7 +44,7 @@ class GridWorldAgent:
             total_reward = 0
             steps = 0
             
-            while state != self.goal and steps < 50:  # Límite de pasos
+            while state != self.goal and steps < 50:
                 # Selección de acción ε-greedy
                 if random.random() < self.epsilon:
                     action_idx = random.randint(0, len(self.actions) - 1)
@@ -77,11 +77,6 @@ class GridWorldAgent:
             # Reducir exploración gradualmente
             if ep % 200 == 0 and ep > 0:
                 self.epsilon = max(0.01, self.epsilon * 0.9)
-            
-            # Print de progreso
-            if ep % 100 == 0:
-                avg_reward = np.mean(episode_rewards[-100:]) if ep > 0 else total_reward
-                print(f"Episodio {ep}: Recompensa = {total_reward}, ε = {self.epsilon:.3f}, Avg = {avg_reward:.2f}")
         
         return episode_rewards, episode_steps
     
@@ -107,6 +102,9 @@ class GridWorldAgent:
         return path, actions_taken
     
     def plot_training(self, episode_rewards):
+        # Asegurar que la carpeta static existe
+        os.makedirs('static', exist_ok=True)
+        
         plt.style.use('seaborn-v0_8')
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
         
@@ -156,46 +154,50 @@ class GridWorldAgent:
         plt.colorbar(im, ax=ax2, label='Acción')
         
         plt.tight_layout()
-        plt.savefig('training_results.png', dpi=300, bbox_inches='tight')
-        print("Gráfica guardada como 'training_results.png'")
-        plt.show()
+        plt.savefig('static/rewards.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        print("✓ Gráfica de entrenamiento guardada en static/rewards.png")
     
-    def plot_grid_world(self):
-        """Visualización adicional del entorno GridWorld"""
-        fig, ax = plt.subplots(figsize=(6, 6))
+    def plot_trajectory(self, path):
+        """Generar gráfica de trayectoria"""
+        # Asegurar que la carpeta static existe
+        os.makedirs('static', exist_ok=True)
         
-        # Crear grid
-        grid_display = np.zeros((self.grid_size, self.grid_size))
+        plt.figure(figsize=(6, 6))
         
-        # Marcar posiciones especiales
-        grid_display[self.start] = 1
-        grid_display[self.obstacle] = -1
-        grid_display[self.goal] = 2
-        
-        im = ax.imshow(grid_display, cmap='RdYlBu', alpha=0.7)
-        
-        # Añadir texto
+        # Dibujar grid
         for i in range(self.grid_size):
             for j in range(self.grid_size):
                 if (i, j) == self.start:
-                    ax.text(j, i, 'S\n(Inicio)', ha='center', va='center', fontsize=12, fontweight='bold')
+                    plt.text(j, i, 'S', ha='center', va='center', fontsize=20, fontweight='bold')
+                    plt.gca().add_patch(plt.Rectangle((j-0.5, i-0.5), 1, 1, fill=True, color='lightblue'))
                 elif (i, j) == self.goal:
-                    ax.text(j, i, 'G\n(+10)', ha='center', va='center', fontsize=12, fontweight='bold')
+                    plt.text(j, i, 'G', ha='center', va='center', fontsize=20, fontweight='bold')
+                    plt.gca().add_patch(plt.Rectangle((j-0.5, i-0.5), 1, 1, fill=True, color='lightgreen'))
                 elif (i, j) == self.obstacle:
-                    ax.text(j, i, 'X\n(-5)', ha='center', va='center', fontsize=12, fontweight='bold')
+                    plt.text(j, i, 'X', ha='center', va='center', fontsize=20, fontweight='bold')
+                    plt.gca().add_patch(plt.Rectangle((j-0.5, i-0.5), 1, 1, fill=True, color='lightcoral'))
                 else:
-                    ax.text(j, i, f'({i},{j})', ha='center', va='center', fontsize=10, alpha=0.7)
+                    plt.gca().add_patch(plt.Rectangle((j-0.5, i-0.5), 1, 1, fill=False, edgecolor='gray'))
         
-        ax.set_title('GridWorld Environment')
-        ax.set_xticks(range(self.grid_size))
-        ax.set_yticks(range(self.grid_size))
-        ax.grid(True, color='white', linewidth=2)
+        # Dibujar trayectoria
+        if len(path) > 1:
+            x_coords = [coord[1] for coord in path]
+            y_coords = [coord[0] for coord in path]
+            plt.plot(x_coords, y_coords, 'ro-', linewidth=2, markersize=8)
         
-        plt.tight_layout()
-        plt.savefig('gridworld_environment.png', dpi=300, bbox_inches='tight')
-        plt.show()
+        plt.xlim(-0.5, self.grid_size-0.5)
+        plt.ylim(-0.5, self.grid_size-0.5)
+        plt.gca().invert_yaxis()
+        plt.title('Trayectoria del Agente')
+        plt.savefig('static/trajectory.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        print("✓ Gráfica de trayectoria guardada en static/trajectory.png")
     
-    def save_model(self, filename='q_learning_model.pkl'):
+    def save_model(self, filename='static/modelo_entrenado.pkl'):
+        # Asegurar que la carpeta existe
+        os.makedirs(os.path.dirname(filename) if os.path.dirname(filename) else '.', exist_ok=True)
+        
         with open(filename, 'wb') as f:
             pickle.dump({
                 'Q_table': self.Q,
@@ -207,78 +209,13 @@ class GridWorldAgent:
                     'actions': self.actions
                 }
             }, f)
-        print(f"Modelo guardado como {filename}")
+        print(f"✓ Modelo guardado en {filename}")
     
-    def load_model(self, filename='q_learning_model.pkl'):
+    def load_model(self, filename='static/modelo_entrenado.pkl'):
         if os.path.exists(filename):
             with open(filename, 'rb') as f:
                 data = pickle.load(f)
                 self.Q = data['Q_table']
-            print(f"Modelo cargado desde {filename}")
+            print(f"✓ Modelo cargado desde {filename}")
         else:
-            print(f"Archivo {filename} no encontrado")
-
-# Función principal mejorada
-def main():
-    print("=== ENTRENAMIENTO DE AGENTE GRIDWORLD ===")
-    
-    # Crear y entrenar agente
-    agent = GridWorldAgent(alpha=0.5, gamma=0.9, epsilon=0.3)
-    
-    # Mostrar el entorno primero
-    print("\n1. Visualizando el entorno GridWorld...")
-    agent.plot_grid_world()
-    
-    print("\n2. Iniciando entrenamiento...")
-    print("Parámetros: α=0.5, γ=0.9, ε=0.3, episodios=800")
-    print("-" * 50)
-    
-    episode_rewards, episode_steps = agent.train(episodes=800)
-    
-    # Resultados
-    print("\n" + "="*50)
-    print("RESULTADOS DEL ENTRENAMIENTO")
-    print("="*50)
-    
-    last_100_avg = np.mean(episode_rewards[-100:])
-    last_50_avg = np.mean(episode_rewards[-50:])
-    
-    print(f"Recompensa promedio (últimos 100 episodios): {last_100_avg:.2f}")
-    print(f"Recompensa promedio (últimos 50 episodios): {last_50_avg:.2f}")
-    print(f"Recompensa máxima: {np.max(episode_rewards)}")
-    print(f"Recompensa mínima: {np.min(episode_rewards)}")
-    print(f"Éxitos (recompensa >= 10): {sum(r >= 10 for r in episode_rewards)}/{len(episode_rewards)}")
-    
-    # Obtener mejor ruta
-    best_path, actions = agent.get_best_path()
-    print(f"\nMejor ruta encontrada ({len(best_path)} pasos):")
-    for i, (state, action) in enumerate(zip(best_path[:-1], actions)):
-        print(f"  Paso {i+1}: {state} -> {action} -> {best_path[i+1]}")
-    
-    # Graficar resultados
-    print("\n3. Generando gráficas...")
-    agent.plot_training(episode_rewards)
-    
-    # Guardar modelo
-    print("\n4. Guardando modelo...")
-    agent.save_model()
-    
-    print("\n¡Entrenamiento completado!")
-    return agent, episode_rewards
-
-# Ejecutar solo si es el script principal
-if __name__ == "__main__":
-    try:
-        trained_agent, rewards = main()
-        
-        # Verificar que las gráficas se crearon
-        if os.path.exists('training_results.png'):
-            print("✓ Gráfica 'training_results.png' creada exitosamente")
-        if os.path.exists('gridworld_environment.png'):
-            print("✓ Gráfica 'gridworld_environment.png' creada exitosamente")
-        if os.path.exists('q_learning_model.pkl'):
-            print("✓ Modelo 'q_learning_model.pkl' guardado exitosamente")
-            
-    except Exception as e:
-        print(f"Error durante la ejecución: {e}")
-        print("Asegúrate de tener matplotlib instalado: pip install matplotlib")
+            print(f"✗ Archivo {filename} no encontrado")

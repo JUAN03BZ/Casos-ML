@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import RegresionLinear as RegresionLinear
 import matplotlib
 matplotlib.use("Agg") 
@@ -8,6 +8,9 @@ import base64
 import RegresionLogistica as Rl
 import adaBoostModel
 import RefuerzoPractico
+import os
+import pickle
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -51,7 +54,7 @@ def casos():
             "problema": "Netflix debía invertir grandes sumas en producciones originales sin certeza de éxito. Antes de apostar por una serie o película, surgían preguntas clave: ¿habrá suficiente audiencia?, ¿en qué países funcionará mejor?, ¿qué actores, directores o géneros garantizan más atractivo? Tradicionalmente los estudios se guiaban por intuición o tendencias generales, pero Netflix buscaba un enfoque más científico y escalable.",
             "algoritmo": "A finales de los 2000, con grandes volúmenes de datos de usuarios, Netflix implementó Machine Learning supervisado para predecir demanda. Usaba como entradas género, elenco, director, país, año y desempeño de títulos similares, y como salida métricas de éxito como horas vistas y nuevos suscriptores. Empleó regresión para estimar audiencias, (árboles de decisión y Random Forest) para clasificar probabilidades de éxito por segmentos, y luego (redes neuronales) para captar patrones más complejos.",
             "beneficios": "El uso de Machine Learning permitió a Netflix reducir el riesgo en sus inversiones al basarse en predicciones sustentadas en datos y no solo en la intuición, lo que facilitó acertar en mercados internacionales al anticipar qué producciones tendrían mayor éxito en regiones como Latinoamérica, Europa o Asia. Además, impulsó la expansión de su catálogo original, convirtiéndose en un valor diferencial de la plataforma, y le otorgó una ventaja competitiva frente a otros estudios que dudaban, al apostar con mayor seguridad en proyectos respaldados por modelos predictivos. ",
-            "referencia": "OpenAI. (2025). Casos relevantes de Netflix y Machine Learning: problemas y algoritmos. ChatGPT (versión GPT-5) [Modelo de lenguaje]. [https://chat.openai.com/](https://chat.openai.com/), Wired. (2018, enero 2). How do Netflix’s algorithms work? Machine learning helps to predict what viewers will like. WIRED. [https://www.wired.com/story/how-do-netflixs-algorithms-work-machine-learning-helps-to-predict-what-viewers-will-like](https://www.wired.com/story/how-do-netflixs-algorithms-work-machine-learning-helps-to-predict-what-viewers-will-like), Netflix Technology Blog. (2018, mayo 9). Supporting content decision makers with machine learning. Medium. https://netflixtechblog.com/supporting-content-decision-makers-with-machine-learning-995b7b76006f"
+            "referencia": "OpenAI. (2025). Casos relevantes de Netflix y Machine Learning: problemas y algoritmos. ChatGPT (versión GPT-5) [Modelo de lenguaje]. [https://chat.openai.com/](https://chat.openai.com/), Wired. (2018, enero 2). How do Netflix's algorithms work? Machine learning helps to predict what viewers will like. WIRED. [https://www.wired.com/story/how-do-netflixs-algorithms-work-machine-learning-helps-to-predict-what-viewers-will-like](https://www.wired.com/story/how-do-netflixs-algorithms-work-machine-learning-helps-to-predict-what-viewers-will-like), Netflix Technology Blog. (2018, mayo 9). Supporting content decision makers with machine learning. Medium. https://netflixtechblog.com/supporting-content-decision-makers-with-machine-learning-995b7b76006f"
         },
         {
             "titulo": "Andres Julian Canasto Acevedo, Industria Financiera",
@@ -64,15 +67,13 @@ def casos():
                 "Mixson, E. (2021, Junio 30). 3 Ways American Express is Using AI to Stay Ahead of Disruption | AI, Data & Analytics Network. AI, Data & Analytics Network. https://www.aidataanalytics.network/data-science-ai/articles/3-ways-american-express-is-using-ai-to-stay-ahead-of-disruption?utm_source=chatgpt.com",
                 "Artificial intelligence at American Express - Two current use cases - EmerJ Artificial Intelligence Research. Emerj Artificial Intelligence Research. https://emerj.com/artificial-intelligence-at-american-express/?utm_source=chatgpt.com",
                 "OpenAI. (2024). Casos relevantes de American Express y Machine Learning: problemas, algoritmos y beneficios. ChatGPT (versión GPT-4) [Modelo de lenguaje]. [https://chat.openai.com/](https://chat.openai.com/)",
-                "Brooks, J. AmEX’s impactful use of Machine Learning – SignalScout. https://signalscout.io/amexs-impactful-use-of-machine-learning/?utm_source=chatgpt.com",
+                "Brooks, J. AmEX's impactful use of Machine Learning – SignalScout. https://signalscout.io/amexs-impactful-use-of-machine-learning/?utm_source=chatgpt.com",
                 "DigitalDefynd, T. (2025, Agosto 25). 5 ways American Express is using AI - Case Study [2025] - DigitalDefynd. DigitalDefynd. https://digitaldefynd.com/IQ/american-express-using-ai-case-study/?utm_source=chatgpt.com",
                 "American Express: Using Big Data to Prevent Fraud - Digital Innovation and Transformation. (2022, Octubre 2). Digital Innovation and Transformation. https://d3.harvard.edu/platform-digit/submission/american-express-using-big-data-to-prevent-fraud/?utm_source=chatgpt.com"
             ]
         }
     ]
     return render_template('index3.html', cases=CASES)
-
-# ... el resto de tu código ...
 
 @app.route("/RLconceptos")
 def RLconceptos():
@@ -139,7 +140,6 @@ def RLpractico():
 def LRconceptos():
     return render_template("LRconceptos.html", title="Conceptos")
 
-
 @app.route("/LRpractico", methods=["GET", "POST"])
 def LRpractico():
     resultado, prob, grafico_url = None, None, None
@@ -161,10 +161,7 @@ def LRpractico():
         prob=prob,
         grafico_url=grafico_url,
         matriz_url=matriz_url,
-
-        
     )
-
 
 @app.route("/AdaBoostConceptos")
 def AdaBoostConceptos():
@@ -206,19 +203,210 @@ def RLrefuerzoConceptos():
 
 @app.route("/RLrefuerzoPractico", methods=["GET", "POST"])
 def RLrefuerzoPractico():
-    result = None
-    steps = None
-
+    # Parámetros por defecto
+    alpha = 0.5
+    gamma = 0.9
+    epsilon = 0.3
+    episodes = 500
+    
+    # Asegurar que static existe
+    os.makedirs('static', exist_ok=True)
+    
+    # Verificar si ya existe un modelo entrenado
+    trained = os.path.exists('static/rewards.png')
+    tested = os.path.exists('static/trajectory.png')
+    
     if request.method == "POST":
-        steps, result = RLrefuerzoPractico.run_agent()
-
+        # Aquí podrías capturar parámetros del formulario si los agregas
+        alpha = float(request.form.get('alpha', alpha))
+        gamma = float(request.form.get('gamma', gamma))
+        epsilon = float(request.form.get('epsilon', epsilon))
+        episodes = int(request.form.get('episodes', episodes))
+        
+        # Ejecutar entrenamiento
+        try:
+            # Importar y entrenar agente
+            from RefuerzoPractico import GridWorldAgent
+            
+            agent = GridWorldAgent(alpha=alpha, gamma=gamma, epsilon=epsilon)
+            episode_rewards, episode_steps = agent.train(episodes=episodes)
+            
+            # Generar y guardar gráficas
+            agent.plot_training(episode_rewards)
+            agent.save_model('static/modelo_entrenado.pkl')
+            
+            trained = True
+            result = f"Entrenamiento completado con {episodes} episodios"
+            
+        except Exception as e:
+            result = f"Error en el entrenamiento: {str(e)}"
+    
     return render_template(
         "RLrefuerzoPractico.html",
-        steps=steps,
-        result=result
+        alpha=alpha,
+        gamma=gamma,
+        epsilon=epsilon,
+        episodes=episodes,
+        actions=["up", "down", "left", "right"],
+        trained=trained,
+        tested=tested,
+        timestamp=int(datetime.now().timestamp())  # Para evitar cache
     )
 
+@app.route("/train_RL", methods=["POST"])
+def train_RL():
+    """Endpoint para entrenamiento asíncrono"""
+    try:
+        # Asegurar que la carpeta static existe
+        os.makedirs('static', exist_ok=True)
+        
+        print("🔧 Iniciando entrenamiento...")
+        
+        # Parámetros del request
+        data = request.get_json() or {}
+        alpha = data.get('alpha', 0.5)
+        gamma = data.get('gamma', 0.9)
+        epsilon = data.get('epsilon', 0.3)
+        episodes = data.get('episodes', 500)
+        
+        print(f"🔧 Parámetros: α={alpha}, γ={gamma}, ε={epsilon}, episodios={episodes}")
+        
+        # Importar y entrenar agente
+        try:
+            from RefuerzoPractico import GridWorldAgent
+            print("✓ GridWorldAgent importado correctamente")
+        except ImportError as e:
+            print(f"✗ Error importando GridWorldAgent: {e}")
+            return jsonify({
+                "status": "error",
+                "message": f"Error importando el agente: {str(e)}"
+            }), 500
+        
+        try:
+            agent = GridWorldAgent(alpha=alpha, gamma=gamma, epsilon=epsilon)
+            print("✓ Agente creado correctamente")
+            
+            episode_rewards, episode_steps = agent.train(episodes=episodes)
+            print(f"✓ Entrenamiento completado. Recompensa final: {episode_rewards[-1] if episode_rewards else 'N/A'}")
+            
+        except Exception as e:
+            print(f"✗ Error durante el entrenamiento: {e}")
+            import traceback
+            traceback.print_exc()
+            return jsonify({
+                "status": "error", 
+                "message": f"Error durante el entrenamiento: {str(e)}"
+            }), 500
+        
+        # Generar gráfica de recompensas
+        try:
+            agent.plot_training(episode_rewards)
+            print("✓ Gráfica de recompensas generada")
+        except Exception as e:
+            print(f"✗ Error generando gráfica: {e}")
+            return jsonify({
+                "status": "error",
+                "message": f"Error generando gráfica: {str(e)}"
+            }), 500
+        
+        # Guardar modelo
+        try:
+            agent.save_model('static/modelo_entrenado.pkl')
+            print("✓ Modelo guardado correctamente")
+        except Exception as e:
+            print(f"✗ Error guardando modelo: {e}")
+        
+        return jsonify({
+            "status": "success", 
+            "message": f"Entrenamiento completado con {episodes} episodios",
+            "episodes": episodes,
+            "final_reward": episode_rewards[-1] if episode_rewards else 0
+        })
+        
+    except Exception as e:
+        print(f"✗ Error general en train_RL: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Error interno del servidor: {str(e)}"
+        }), 500
+
+@app.route("/test_RL", methods=["POST"])
+def test_RL():
+    """Endpoint para probar el modelo entrenado"""
+    try:
+        # Asegurar que la carpeta static existe
+        os.makedirs('static', exist_ok=True)
+        
+        print("🧭 Iniciando prueba de política...")
+        
+        # Cargar modelo entrenado
+        from RefuerzoPractico import GridWorldAgent
+        agent = GridWorldAgent()
+        
+        if os.path.exists('static/modelo_entrenado.pkl'):
+            print("✓ Cargando modelo entrenado existente")
+            agent.load_model('static/modelo_entrenado.pkl')
+        else:
+            print("⚠️  No hay modelo entrenado, entrenando uno rápido...")
+            # Si no hay modelo entrenado, entrenar uno rápido
+            agent.train(episodes=100)
+            agent.save_model('static/modelo_entrenado.pkl')
+        
+        # Generar trayectoria y gráfica
+        best_path, actions = agent.get_best_path()
+        print(f"✓ Trayectoria generada: {len(best_path)} pasos")
+        
+        # Guardar gráfica de trayectoria
+        agent.plot_trajectory(best_path)
+        print("✓ Gráfica de trayectoria guardada")
+        
+        return jsonify({
+            "status": "success",
+            "message": "Simulación completada",
+            "path_length": len(best_path),
+            "path": best_path,
+            "actions": actions
+        })
+        
+    except Exception as e:
+        print(f"✗ Error en test_RL: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Error en la simulación: {str(e)}"
+        }), 500
+
+# SOLUCIÓN SIMPLE: Saltar la creación si ya existen los archivos
+def check_static_files():
+    """Verificar que los archivos necesarios existan"""
+    import os
+    
+    # Asegurar que static existe
+    os.makedirs('static', exist_ok=True)
+    
+    # Lista de archivos necesarios
+    needed_files = [
+        'placeholder-rewards.png',
+        'placeholder-trajectory.png'
+    ]
+    
+    missing_files = []
+    for file in needed_files:
+        path = os.path.join('static', file)
+        if not os.path.exists(path):
+            missing_files.append(file)
+    
+    if missing_files:
+        print(f"⚠️ Archivos faltantes en static: {missing_files}")
+        print("ℹ️  Puedes crearlos manualmente o el sistema los creará cuando sea necesario")
+    else:
+        print("✓ Todos los archivos static están presentes")
+
+# En lugar de create_placeholder_images(), usa:
+check_static_files()
 
 if __name__ == "__main__":
     app.run(debug=True)
-
