@@ -7,6 +7,7 @@ import io
 import base64
 import RegresionLogistica as Rl
 import adaBoostModel
+import RefuerzoPractico
 
 app = Flask(__name__)
 
@@ -199,13 +200,25 @@ def AdaBoostPractico():
         threshold=threshold
     )
 
-@app.route("/RLrefuerzoConceptos", methods=["GET"])
+@app.route("/RLrefuerzoConceptos")
 def RLrefuerzoConceptos():
-    # Puedes pasar variables a la plantilla según tu necesidad
-    return render_template("RLrefuerzoConceptos.html", title="Conceptos Aprendizaje por Refuerzo")
+    return render_template("RLrefuerzoConceptos.html")
+
+@app.route("/RLrefuerzoPractico", methods=["GET", "POST"])
+def RLrefuerzoPractico():
+    result = None
+    steps = None
+
+    if request.method == "POST":
+        steps, result = RLrefuerzoPractico.run_agent()
+
+    return render_template(
+        "RLrefuerzoPractico.html",
+        steps=steps,
+        result=result
+    )
 
 
 if __name__ == "__main__":
-
     app.run(debug=True)
 

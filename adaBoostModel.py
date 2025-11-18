@@ -10,14 +10,13 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import matplotlib.pyplot as plt
 import io
 import base64
-
+import os
 RANDOM_STATE = 42
 
 def load_data():
     
-    df = pd.read_csv("satisfaccion_cliente.csv")
-    
-
+    ruta_csv = os.path.join(os.path.dirname(__file__), "satisfaccion_cliente.csv")
+    df = pd.read_csv(ruta_csv)
     return df
 
 df = load_data()

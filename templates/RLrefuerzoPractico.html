@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mt-3">Caso Práctico – Entrenamiento del Agente RL</h2>
+
+<p>
+En esta sección puedes entrenar un agente utilizando Q-Learning o Deep Q-Learning. 
+El agente interactúa con el entorno, mejora su política y al final es posible visualizar 
+las recompensas obtenidas y probar el comportamiento aprendido.
+</p>
+
+<hr>
+
+<h4>Parámetros del Entrenamiento</h4>
+<div class="row">
+  <div class="col-md-4">
+    <p><strong>α (Tasa de aprendizaje):</strong> {{ alpha }}</p>
+    <p><strong>γ (Factor de descuento):</strong> {{ gamma }}</p>
+    <p><strong>ε (Exploración inicial):</strong> {{ epsilon }}</p>
+    <p><strong>Episodios:</strong> {{ episodes }}</p>
+  </div>
+</div>
+
+<hr>
+
+<h4>Acciones disponibles</h4>
+<p>{{ actions }}</p>
+
+<div class="text-center mt-4">
+  <button id="trainBtn" class="btn btn-primary">🚀 Entrenar agente</button>
+  <button id="testBtn" class="btn btn-success ms-3">🎯 Probar política aprendida</button>
+</div>
+
+<hr>
+
+<h4 class="mt-4">Evolución de la Recompensa</h4>
+<p>El gráfico mostrará la recompensa promedio acumulada durante los episodios de entrenamiento.</p>
+
+<div class="text-center">
+  <img id="rewardPlot" src="/static/rewards.png?{{ timestamp }}" 
+       alt="Gráfico de Recompensas" class="img-fluid rounded border">
+</div>
+
+<hr>
+
+<h4 class="mt-4">Trayectoria o Política Aprendida</h4>
+<p>Esta imagen se generará después de probar el agente entrenado.</p>
+
+<div class="text-center">
+  <img id="trajectoryPlot" src="/static/trajectory.png?{{ timestamp }}" 
+       alt="Trayectoria del Agente" class="img-fluid border">
+</div>
+
+<div class="mt-5 text-center">
+  <a href="/RLconceptos" class="btn btn-outline-secondary">📗 Volver a Conceptos</a>
+  <a href="/index2" class="btn btn-success ms-3">🏠 Inicio</a>
+</div>
+
+<script>
+// -----------------------------
+// BOTÓN ENTRENAR
+// -----------------------------
+document.getElementById("trainBtn").onclick = function () {
+    fetch("/train_RL")
+        .then(response => response.json())
+        .then(data => {
+            alert("Entrenamiento completado");
+            document.getElementById("rewardPlot").src = "/static/rewards.png?" + new Date().getTime();
+        });
+};
+
+// -----------------------------
+// BOTÓN PROBAR POLÍTICA
+// -----------------------------
+document.getElementById("testBtn").onclick = function () {
+    fetch("/test_RL")
+        .then(response => response.json())
+        .then(data => {
+            alert("Simulación completada");
+            document.getElementById("trajectoryPlot").src = "/static/trajectory.png?" + new Date().getTime();
+        });
+};
+</script>
+
+{% endblock %}
