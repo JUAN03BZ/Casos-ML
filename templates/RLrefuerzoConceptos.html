@@ -1,74 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
-
-<h2 class="mt-3">Conceptos Básicos del Aprendizaje por Refuerzo</h2>
-
+<h2>Concepto Aprendizaje por refuerzo</h2>
 <p>
-El <strong>Aprendizaje por Refuerzo (Reinforcement Learning, RL)</strong> es un paradigma del aprendizaje automático en el que un agente aprende a 
-tomar decisiones mediante interacción directa con un entorno. A través de prueba y error, el agente ejecuta acciones, 
-observa los nuevos estados del entorno y recibe recompensas, cuyo objetivo principal es maximizar la 
-<strong>recompensa acumulada a largo plazo</strong>.
+El Aprendizaje por Refuerzo (RL) es un paradigma de aprendizaje automático donde un agente aprende a tomar decisiones mediante interacción directa con un entorno.
+El agente ejecuta acciones, recibe recompensas y observa nuevos estados, con el objetivo de maximizar la recompensa acumulada a largo plazo.
 </p>
 
-<hr>
+<h4>Componentes del modelo RL:</h4>
 
-<h4>1. Componentes del modelo RL</h4>
-<ul>
-  <li><strong>Agente:</strong> Entidad que aprende y decide qué acción ejecutar.</li>
-  <li><strong>Entorno:</strong> Sistema externo con el que el agente interactúa y del cual recibe estados y recompensas.</li>
-  <li><strong>Estado (s):</strong> Representación del entorno en un instante de tiempo.</li>
-  <li><strong>Acción (a):</strong> conjunto de decisiones que el agente puede realizar en cada estado.</li>
-  <li><strong>Recompensa (r):</strong> Señal numérica que indica qué tan beneficiosa fue la acción tomada.</li>
-  <li><strong>Política (π):</strong> Estrategia que define la acción que ejecutará el agente en cada estado.</li>
+</ul>
+  <li><strong>Agente:</strong> Entidad que toma decisiones y aprende qué acción realizar.</li>
+  <li><strong>Entorno:</strong> El “mundo” con el que el agente interactúa. Devuelve estados y recompensas.</li>
+  <li><strong>Estado:</strong> Descripción del entorno en un momento específico.</li>
+  <li><strong>Acción:</strong> Las decisiones que el agente puede tomar.</li>
+  <li><strong>Recompensa:</strong> Número que indica qué tan buena fue la acción.</li>
+  <li><strong>Política:</strong> Estrategia que usa el agente para elegir acciones basadas en estados.</li>
 </ul>
 
-<hr>
-
-<h4>2. Principios del ciclo de aprendizaje</h4>
-
+<h4>Principios del ciclo de aprendizaje:</h4>
 <ul>
-  <li>
-    <strong>Exploración vs. Explotación:</strong><br>
-    <strong>Exploración</strong> implica probar nuevas acciones para descubrir recompensas potencialmente mejores.<br>
-    <strong>Explotación</strong> consiste en usar las acciones ya conocidas que generan mayor recompensa.
-  </li>
+ <li><strong>Exploración vs. Explotación:</strong> La relación entre variables es aproximadamente lineal.</li> 
+  Exploración: probar nuevas acciones para descubrir mejores recompensas.<br>  
+  Explotación: usar el conocimiento actual para obtener recompensa inmediata. 
+    <li><strong>Retorno acumulado:</strong> El agente busca maximizar la recompensa total obtenida durante varios pasos, no solo la recompensa inmediata.</li> 
 
-  <li>
-    <strong>Retorno acumulado:</strong><br>
-    Es la suma de recompensas recibidas desde un estado inicial hasta finalizar el episodio.
-  </li>
-
-  <li>
-    <strong>Descuento temporal (γ):</strong><br>
-    Parámetro que determina qué tan importantes son las recompensas futuras respecto a las inmediatas.
-  </li>
+    <li><strong>Descuento temporal :</strong> A menudo, las recompensas futuras se "descuentan" usando un factor gamma (γ) para preferir recompensas inmediatas sobre las distantes, reflejando el valor decreciente del tiempo en decisiones a largo plazo.</li> 
 </ul>
 
-<hr>
-
-<h4>3. Principales algoritmos de RL</h4>
+<h4>Principales algoritmos de RL y aplicaciones:</h4>
 <ul>
-  <li><strong>Q-Learning:</strong> Algoritmo <i>off-policy</i> que aprende valores de acción maximizando la recompensa futura esperada.</li>
-  <li><strong>SARSA:</strong> Algoritmo <i>on-policy</i> que actualiza valores de acuerdo a la acción realmente tomada por la política actual.</li>
-  <li><strong>Deep Q-Network (DQN):</strong> Variante de Q-Learning que utiliza redes neuronales para aproximar la función Q.</li>
+    <li><strong>Q-Learning:</strong> Algoritmo basado en tablas que aprende el valor esperado de realizar una acción en un estado. No requiere conocer el modelo del entorno y actualiza su tabla de valores mediante la ecuación de Bellman. Aplicaciones: juegos, navegación robótica.</li> 
+    <li><strong>SARSA:</strong> Similar a Q-Learning, pero actualiza su estimación en función de la acción realmente tomada, lo que conduce a conductas más conservadoras. Usado en situaciones donde es importante la política de exploración.</li> 
+    <li><strong>Deep Q-Network (DQN):</strong> Aplica redes neuronales profundas para aproximar la función Q, permitiendo resolver problemas con espacios de estado y acción grandes (por ejemplo, juegos de Atari, control en robots complejos).</li> 
 </ul>
 
-<hr>
-
-<h4>4. Buenas prácticas</h4>
+<h4>Principales algoritmos de RL y aplicaciones:</h4>
 <ul>
-  <li>Ajuste adecuado de la tasa de exploración ε.</li>
-  <li>Normalización o escalado correcto de recompensas.</li>
-  <li>Control de estabilidad durante el entrenamiento.</li>
-  <li>Uso de suficientes episodios para garantizar convergencia.</li>
+    <li><strong>Estabilidad del aprendizaje:</strong> Utilizar técnicas como la repetición de experiencias (experience replay) y el uso de redes objetivo (target networks) para estabilizar el entrenamiento de RL con función de valor aproximada.</li> 
+    <li><strong>Tasa de exploración:</strong> Mantener un adecuado equilibrio entre exploración y explotación, usando estrategias como epsilon-greedy y ajustando el parámetro epsilon durante el entrenamiento.</li> 
+    <li><strong>Manejo de recompensas:</strong> Diseñar funciones de recompensa claras y alineadas con el objetivo real para evitar que el agente aprenda conductas no deseadas o atajos.</li> 
+    <li><strong>Convergencia:</strong> Monitorizar que el agente finalmente adopte una política estable.</li> 
+    <li><strong>Generalización:</strong> Probar el agente en escenarios distintos de aquellos en los que fue entrenado para asegurar que la estrategia aprendida es robusta.</li> 
 </ul>
 
-<hr>
-
-<h4>Referencias (APA 7)</h4>
-<p>Sutton, R. S., & Barto, A. G. (2018). <i>Reinforcement Learning: An Introduction</i> (2nd ed.). MIT Press.</p>
-<p>Mnih, V., et al. (2015). Human-level control through deep reinforcement learning. <i>Nature, 518</i>(7540), 529–533.</p>
-<p>Kaelbling, L. P., Littman, M. L., & Moore, A. W. (1996). Reinforcement learning: A survey. <i>Artificial Intelligence, 101</i>(1-2), 237–285.</p>
+<h4>Referencias:</h4>
+<p>Sutton, R. S., & Barto, A. G. (2018). <i>Reinforcement Learning: An Introduction</i> (2nd ed.). MIT Press.</p> 
+<p>Kaelbling, L. P., Littman, M. L., & Moore, A. W. (1996). <i>Reinforcement Learning: A Survey</i>. Journal of Artificial Intelligence Research, 4, 237–285.</p> 
+<p>Mnih, V., Kavukcuoglu, K., Silver, D., et al. (2015). <i>Human-level control through deep reinforcement learning</i>. Nature, 518(7540), 529–533.</p> 
+<p>Russell, S., & Norvig, P. (2021). <i>Artificial Intelligence: A Modern Approach</i> (4th ed.). Pearson.</p>
 
 <div class="mt-5 text-center">
   <a href="/index2" class="btn btn-success me-3">🏠 Ir a Inicio</a>
