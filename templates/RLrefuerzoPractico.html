@@ -171,7 +171,7 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 let isTraining = false;
 
 // -----------------------------
-// BOTÓN ENTRENAR - CORREGIDO
+// BOTÓN ENTRENAR - MEJORADO
 // -----------------------------
 document.getElementById("trainBtn").onclick = function () {
     if (isTraining) {
@@ -183,11 +183,18 @@ document.getElementById("trainBtn").onclick = function () {
     const progressDiv = document.getElementById("trainingProgress");
     const progressText = document.getElementById("progressText");
     const testBtn = document.getElementById("testBtn");
+    const rewardImg = document.getElementById("rewardPlot");
+    const rewardPlaceholder = document.getElementById("rewardPlaceholder");
     
     // Mostrar progreso
     progressDiv.classList.remove("d-none");
     this.disabled = true;
     progressText.textContent = "Entrenando agente... Esto puede tomar unos segundos.";
+    
+    // Ocultar placeholder si existe
+    if (rewardPlaceholder) {
+        rewardPlaceholder.style.display = 'none';
+    }
     
     // ENVIAR DATOS JSON CORRECTAMENTE
     const trainingData = {
@@ -218,25 +225,40 @@ document.getElementById("trainBtn").onclick = function () {
         if (data.status === "success") {
             progressText.innerHTML = "✅ <strong>Entrenamiento completado!</strong> Actualizando gráficas...";
             
-            // Actualizar imagen con cache busting
+            // Forzar recarga de la imagen con timestamp único
             setTimeout(() => {
-                const rewardImg = document.getElementById("rewardPlot");
-                rewardImg.src = "/static/rewards.png?" + new Date().getTime();
+                const timestamp = new Date().getTime();
+                rewardImg.src = "/static/rewards.png?" + timestamp;
                 rewardImg.style.display = "block";
                 
-                // Habilitar botón de prueba
-                testBtn.disabled = false;
+                // Verificar si la imagen se cargó correctamente
+                rewardImg.onload = function() {
+                    console.log("✓ Imagen de recompensas cargada correctamente");
+                    progressText.innerHTML = "✅ <strong>Entrenamiento completado!</strong>";
+                    
+                    // Habilitar botón de prueba
+                    testBtn.disabled = false;
+                    
+                    // Ocultar progreso después de un tiempo
+                    setTimeout(() => {
+                        progressDiv.classList.add("d-none");
+                        document.getElementById("trainBtn").disabled = false;
+                        isTraining = false;
+                        
+                        // Mostrar mensaje de éxito
+                        showAlert("🎉 Entrenamiento completado exitosamente! La gráfica se ha actualizado.", "success");
+                    }, 1000);
+                };
                 
-                // Ocultar progreso
-                setTimeout(() => {
-                    progressDiv.classList.add("d-none");
+                rewardImg.onerror = function() {
+                    console.error("❌ Error cargando la imagen de recompensas");
+                    progressText.innerHTML = "✅ <strong>Entrenamiento completado!</strong> (Error cargando gráfica)";
+                    showAlert("⚠️ Entrenamiento completado pero hubo un error cargando la gráfica. Intenta recargar la página.", "warning");
                     document.getElementById("trainBtn").disabled = false;
                     isTraining = false;
-                    
-                    // Mostrar mensaje de éxito
-                    showAlert("🎉 Entrenamiento completado exitosamente!", "success");
-                }, 1000);
-            }, 500);
+                };
+                
+            }, 1000);
         } else {
             throw new Error(data.message || "Error desconocido");
         }
@@ -251,7 +273,7 @@ document.getElementById("trainBtn").onclick = function () {
 };
 
 // -----------------------------
-// BOTÓN PROBAR POLÍTICA - CORREGIDO
+// BOTÓN PROBAR POLÍTICA - MEJORADO
 // -----------------------------
 document.getElementById("testBtn").onclick = function () {
     if (isTraining) {
@@ -262,9 +284,16 @@ document.getElementById("testBtn").onclick = function () {
     this.disabled = true;
     const progressDiv = document.getElementById("trainingProgress");
     const progressText = document.getElementById("progressText");
+    const trajectoryImg = document.getElementById("trajectoryPlot");
+    const trajectoryPlaceholder = document.getElementById("trajectoryPlaceholder");
     
     progressDiv.classList.remove("d-none");
     progressText.textContent = "Ejecutando simulación con política aprendida...";
+    
+    // Ocultar placeholder si existe
+    if (trajectoryPlaceholder) {
+        trajectoryPlaceholder.style.display = 'none';
+    }
     
     // ENVIAR SOLICITUD VACÍA PERO CON HEADERS CORRECTOS
     fetch("/test_RL", {
@@ -287,16 +316,30 @@ document.getElementById("testBtn").onclick = function () {
             progressText.innerHTML = "✅ <strong>Simulación completada!</strong> Actualizando trayectoria...";
             
             setTimeout(() => {
-                const trajectoryImg = document.getElementById("trajectoryPlot");
-                trajectoryImg.src = "/static/trajectory.png?" + new Date().getTime();
+                const timestamp = new Date().getTime();
+                trajectoryImg.src = "/static/trajectory.png?" + timestamp;
                 trajectoryImg.style.display = "block";
                 
-                setTimeout(() => {
-                    progressDiv.classList.add("d-none");
-                    this.disabled = false;
-                    showAlert("🧭 Trayectoria generada exitosamente!", "success");
-                }, 1000);
-            }, 500);
+                // Verificar si la imagen se cargó correctamente
+                trajectoryImg.onload = function() {
+                    console.log("✓ Imagen de trayectoria cargada correctamente");
+                    progressText.innerHTML = "✅ <strong>Simulación completada!</strong>";
+                    
+                    setTimeout(() => {
+                        progressDiv.classList.add("d-none");
+                        document.getElementById("testBtn").disabled = false;
+                        showAlert("🧭 Trayectoria generada exitosamente!", "success");
+                    }, 1000);
+                };
+                
+                trajectoryImg.onerror = function() {
+                    console.error("❌ Error cargando la imagen de trayectoria");
+                    progressText.innerHTML = "✅ <strong>Simulación completada!</strong> (Error cargando trayectoria)";
+                    showAlert("⚠️ Simulación completada pero hubo un error cargando la trayectoria. Intenta recargar la página.", "warning");
+                    document.getElementById("testBtn").disabled = false;
+                };
+                
+            }, 1000);
         } else {
             throw new Error(data.message || "Error desconocido");
         }
@@ -322,6 +365,10 @@ document.getElementById("resetBtn").onclick = function () {
 // FUNCIÓN AUXILIAR PARA ALERTAS
 // -----------------------------
 function showAlert(message, type) {
+    // Remover alertas anteriores
+    const existingAlerts = document.querySelectorAll('.alert.alert-dismissible');
+    existingAlerts.forEach(alert => alert.remove());
+    
     const alertDiv = document.createElement("div");
     alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-3`;
     alertDiv.innerHTML = `
@@ -329,7 +376,13 @@ function showAlert(message, type) {
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
     
-    document.querySelector("hr").before(alertDiv);
+    // Insertar después del primer hr
+    const firstHr = document.querySelector("hr");
+    if (firstHr) {
+        firstHr.after(alertDiv);
+    } else {
+        document.querySelector(".text-center.mt-4").after(alertDiv);
+    }
     
     // Auto-remover después de 5 segundos
     setTimeout(() => {
@@ -340,17 +393,40 @@ function showAlert(message, type) {
 }
 
 // -----------------------------
-// MANEJO DE ERRORES DE IMAGEN
+// MANEJO DE ERRORES DE IMAGEN AL CARGAR LA PÁGINA
 // -----------------------------
-document.getElementById("rewardPlot").onerror = function() {
-    document.getElementById("rewardPlaceholder").innerHTML = 
-        '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Gráfica no disponible. Ejecuta el entrenamiento primero.</div>';
-};
-
-document.getElementById("trajectoryPlot").onerror = function() {
-    document.getElementById("trajectoryPlaceholder").innerHTML = 
-        '<div class="alert alert-info"><i class="fas fa-info-circle me-2"></i>Ejecuta "Probar política" para generar la trayectoria.</div>';
-};
+document.addEventListener('DOMContentLoaded', function() {
+    const rewardImg = document.getElementById("rewardPlot");
+    const trajectoryImg = document.getElementById("trajectoryPlot");
+    
+    rewardImg.onerror = function() {
+        console.log("❌ Imagen de recompensas no disponible");
+        const placeholder = document.getElementById("rewardPlaceholder");
+        if (placeholder) {
+            placeholder.innerHTML = '<div class="alert alert-warning mt-3"><i class="fas fa-exclamation-triangle me-2"></i>Ejecuta el entrenamiento para generar la gráfica de recompensas</div>';
+            placeholder.style.display = 'block';
+        }
+    };
+    
+    trajectoryImg.onerror = function() {
+        console.log("❌ Imagen de trayectoria no disponible");
+        const placeholder = document.getElementById("trajectoryPlaceholder");
+        if (placeholder) {
+            placeholder.innerHTML = '<div class="alert alert-info mt-3"><i class="fas fa-info-circle me-2"></i>Ejecuta "Probar política" para generar la trayectoria</div>';
+            placeholder.style.display = 'block';
+        }
+    };
+    
+    // Verificar imágenes al cargar
+    setTimeout(() => {
+        if (rewardImg.naturalWidth === 0) {
+            rewardImg.onerror();
+        }
+        if (trajectoryImg.naturalWidth === 0) {
+            trajectoryImg.onerror();
+        }
+    }, 1000);
+});
 </script>
 
 {% endblock %}

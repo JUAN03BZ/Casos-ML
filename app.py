@@ -12,7 +12,7 @@ import os
 import pickle
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 @app.route("/")
 def home():
@@ -316,11 +316,17 @@ def train_RL():
         except Exception as e:
             print(f"✗ Error guardando modelo: {e}")
         
+        # CONVERTIR TIPOS NUMPY A PYTHON NATIVO PARA JSON
+        final_reward = 0
+        if episode_rewards:
+            # Convertir numpy types a Python native types
+            final_reward = float(episode_rewards[-1]) if hasattr(episode_rewards[-1], 'item') else int(episode_rewards[-1])
+        
         return jsonify({
             "status": "success", 
             "message": f"Entrenamiento completado con {episodes} episodios",
-            "episodes": episodes,
-            "final_reward": episode_rewards[-1] if episode_rewards else 0
+            "episodes": int(episodes),
+            "final_reward": final_reward
         })
         
     except Exception as e:
@@ -362,11 +368,16 @@ def test_RL():
         agent.plot_trajectory(best_path)
         print("✓ Gráfica de trayectoria guardada")
         
+        # CONVERTIR TIPOS NUMPY A PYTHON NATIVO
+        path_length = int(len(best_path))
+        # Convertir tuplas de numpy a listas de Python
+        path_python = [list(map(int, coord)) for coord in best_path]
+        
         return jsonify({
             "status": "success",
             "message": "Simulación completada",
-            "path_length": len(best_path),
-            "path": best_path,
+            "path_length": path_length,
+            "path": path_python,
             "actions": actions
         })
         
