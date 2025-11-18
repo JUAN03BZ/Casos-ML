@@ -14,7 +14,7 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 <!-- Sección de Parámetros Mejorada -->
 <div class="row">
   <div class="col-md-12">
-    <h4>⚙️ Parámetros del Entrenamiento</h4>
+    <h4> Parámetros del Entrenamiento</h4>
     <div class="card">
       <div class="card-body">
         <div class="row">
@@ -51,7 +51,7 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 <hr>
 
 <!-- Sección de Entorno -->
-<h4>🎮 Entorno GridWorld</h4>
+<h4> Entorno GridWorld</h4>
 <div class="row mb-4">
   <div class="col-md-6">
     <div class="card">
@@ -78,13 +78,13 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 <!-- Botones de Control Mejorados -->
 <div class="text-center my-4">
   <button id="trainBtn" class="btn btn-primary btn-lg">
-    🚀 Entrenar Agente
+     Entrenar Agente
   </button>
   <button id="testBtn" class="btn btn-success btn-lg ms-3" {% if not trained %}disabled{% endif %}>
-    🎯 Probar Política Aprendida
+     Probar Política Aprendida
   </button>
   <button id="resetBtn" class="btn btn-outline-secondary btn-lg ms-3">
-    🔄 Reiniciar
+     Reiniciar
   </button>
 </div>
 
@@ -99,7 +99,7 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 <!-- Sección de Resultados -->
 <div class="row">
   <div class="col-md-12">
-    <h4 class="mt-4">📈 Evolución de la Recompensa</h4>
+    <h4 class="mt-4"> Evolución de la Recompensa</h4>
     <p class="text-muted">
       El gráfico muestra la recompensa acumulada durante los episodios de entrenamiento. 
       Una línea ascendente indica que el agente está aprendiendo a maximizar sus recompensas.
@@ -128,7 +128,7 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 <!-- Sección de Política -->
 <div class="row">
   <div class="col-md-12">
-    <h4 class="mt-4">🗺️ Trayectoria del Agente</h4>
+    <h4 class="mt-4"> Trayectoria del Agente</h4>
     <p class="text-muted">
       Visualización de la ruta óptima que el agente aprendió para ir desde el inicio (S) 
       hasta la meta (G), evitando el obstáculo (X).
@@ -162,8 +162,8 @@ podrás visualizar las recompensas obtenidas y la trayectoria aprendida.
 
 <!-- Navegación -->
 <div class="mt-5 text-center">
-  <a href="/RLrefuerzoConceptos" class="btn btn-outline-secondary me-2">📗 Volver a Conceptos</a>
-  <a href="/index2" class="btn btn-success ms-2">🏠 Ir a Inicio</a>
+  <a href="/RLrefuerzoConceptos" class="btn btn-outline-secondary me-2"> Volver a Conceptos</a>
+  <a href="/index2" class="btn btn-success ms-2"> Ir a Inicio</a>
 </div>
 
 <script>
@@ -223,7 +223,7 @@ document.getElementById("trainBtn").onclick = function () {
     })
     .then(data => {
         if (data.status === "success") {
-            progressText.innerHTML = "✅ <strong>Entrenamiento completado!</strong> Actualizando gráficas...";
+            progressText.innerHTML = " <strong>Entrenamiento completado!</strong> Actualizando gráficas...";
             
             // Forzar recarga de la imagen con timestamp único
             setTimeout(() => {
@@ -234,7 +234,7 @@ document.getElementById("trainBtn").onclick = function () {
                 // Verificar si la imagen se cargó correctamente
                 rewardImg.onload = function() {
                     console.log("✓ Imagen de recompensas cargada correctamente");
-                    progressText.innerHTML = "✅ <strong>Entrenamiento completado!</strong>";
+                    progressText.innerHTML = " <strong>Entrenamiento completado!</strong>";
                     
                     // Habilitar botón de prueba
                     testBtn.disabled = false;
@@ -246,14 +246,14 @@ document.getElementById("trainBtn").onclick = function () {
                         isTraining = false;
                         
                         // Mostrar mensaje de éxito
-                        showAlert("🎉 Entrenamiento completado exitosamente! La gráfica se ha actualizado.", "success");
+                        showAlert(" Entrenamiento completado exitosamente! La gráfica se ha actualizado.", "success");
                     }, 1000);
                 };
                 
                 rewardImg.onerror = function() {
-                    console.error("❌ Error cargando la imagen de recompensas");
-                    progressText.innerHTML = "✅ <strong>Entrenamiento completado!</strong> (Error cargando gráfica)";
-                    showAlert("⚠️ Entrenamiento completado pero hubo un error cargando la gráfica. Intenta recargar la página.", "warning");
+                    console.error(" Error cargando la imagen de recompensas");
+                    progressText.innerHTML = " <strong>Entrenamiento completado!</strong> (Error cargando gráfica)";
+                    showAlert(" Entrenamiento completado pero hubo un error cargando la gráfica. Intenta recargar la página.", "warning");
                     document.getElementById("trainBtn").disabled = false;
                     isTraining = false;
                 };
@@ -265,7 +265,7 @@ document.getElementById("trainBtn").onclick = function () {
     })
     .catch(error => {
         console.error("Error en entrenamiento:", error);
-        progressText.innerHTML = "❌ <strong>Error durante el entrenamiento:</strong> " + error.message;
+        progressText.innerHTML = " <strong>Error durante el entrenamiento:</strong> " + error.message;
         document.getElementById("trainBtn").disabled = false;
         isTraining = false;
         showAlert("Error en el entrenamiento: " + error.message, "danger");
@@ -313,7 +313,7 @@ document.getElementById("testBtn").onclick = function () {
     })
     .then(data => {
         if (data.status === "success") {
-            progressText.innerHTML = "✅ <strong>Simulación completada!</strong> Actualizando trayectoria...";
+            progressText.innerHTML = " <strong>Simulación completada!</strong> Actualizando trayectoria...";
             
             setTimeout(() => {
                 const timestamp = new Date().getTime();
@@ -323,19 +323,19 @@ document.getElementById("testBtn").onclick = function () {
                 // Verificar si la imagen se cargó correctamente
                 trajectoryImg.onload = function() {
                     console.log("✓ Imagen de trayectoria cargada correctamente");
-                    progressText.innerHTML = "✅ <strong>Simulación completada!</strong>";
+                    progressText.innerHTML = " <strong>Simulación completada!</strong>";
                     
                     setTimeout(() => {
                         progressDiv.classList.add("d-none");
                         document.getElementById("testBtn").disabled = false;
-                        showAlert("🧭 Trayectoria generada exitosamente!", "success");
+                        showAlert(" Trayectoria generada exitosamente!", "success");
                     }, 1000);
                 };
                 
                 trajectoryImg.onerror = function() {
-                    console.error("❌ Error cargando la imagen de trayectoria");
-                    progressText.innerHTML = "✅ <strong>Simulación completada!</strong> (Error cargando trayectoria)";
-                    showAlert("⚠️ Simulación completada pero hubo un error cargando la trayectoria. Intenta recargar la página.", "warning");
+                    console.error(" Error cargando la imagen de trayectoria");
+                    progressText.innerHTML = " <strong>Simulación completada!</strong> (Error cargando trayectoria)";
+                    showAlert(" Simulación completada pero hubo un error cargando la trayectoria. Intenta recargar la página.", "warning");
                     document.getElementById("testBtn").disabled = false;
                 };
                 
@@ -346,7 +346,7 @@ document.getElementById("testBtn").onclick = function () {
     })
     .catch(error => {
         console.error("Error en simulación:", error);
-        progressText.innerHTML = "❌ <strong>Error en la simulación:</strong> " + error.message;
+        progressText.innerHTML = " <strong>Error en la simulación:</strong> " + error.message;
         this.disabled = false;
         showAlert("Error en la simulación: " + error.message, "danger");
     });
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const trajectoryImg = document.getElementById("trajectoryPlot");
     
     rewardImg.onerror = function() {
-        console.log("❌ Imagen de recompensas no disponible");
+        console.log(" Imagen de recompensas no disponible");
         const placeholder = document.getElementById("rewardPlaceholder");
         if (placeholder) {
             placeholder.innerHTML = '<div class="alert alert-warning mt-3"><i class="fas fa-exclamation-triangle me-2"></i>Ejecuta el entrenamiento para generar la gráfica de recompensas</div>';
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     trajectoryImg.onerror = function() {
-        console.log("❌ Imagen de trayectoria no disponible");
+        console.log(" Imagen de trayectoria no disponible");
         const placeholder = document.getElementById("trajectoryPlaceholder");
         if (placeholder) {
             placeholder.innerHTML = '<div class="alert alert-info mt-3"><i class="fas fa-info-circle me-2"></i>Ejecuta "Probar política" para generar la trayectoria</div>';
